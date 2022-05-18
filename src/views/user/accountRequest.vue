@@ -140,8 +140,8 @@ export default {
 
       this.qrCode = new QRCode('qrcode', {
         width: 280,
-        height: 280,        // 高度
-        text: this.link,   // 二维码内容
+        height: 280,        // 高度 height
+        text: this.link,   // 二维码内容 QR code content
       })
     },
     downloadCodeImg () {

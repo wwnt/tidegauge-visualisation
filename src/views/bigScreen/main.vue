@@ -30,6 +30,7 @@
       <!-- main page -->
       <v-main>
         <!-- layer操作 -->
+        <!-- layer operation -->
         <div class="operation-panel-position" id="layerController">
           <v-btn @click="showLayerPanel = !showLayerPanel">
             <v-icon>mdi-layers-triple</v-icon>
@@ -140,7 +141,7 @@ let vm;
 let getCurrentTimeInterval = null//获得当前时间的定时 Get the timing of the current time 
 let layerPlayInterval = null//layer循环播放定时器 Loop timer 
 let layerPlayIntervalIndex = 0//layer循环播放定时器下标 Loop timer index
-let ableOverlayerIndexs = [] //参与播放的overlayer下标数组 去掉禁用的
+let ableOverlayerIndexs = [] //参与播放的overlayer下标数组 去掉禁用的 Array of overlay subscripts participating in playback Remove disabled ones
 export default {
   data () {
     return {
@@ -202,12 +203,12 @@ export default {
     //提示工具
     // tips 
     tips (text, color) {
-      vm.showSnackbar = true; //是否显示 display
-      vm.snackbarText = text; //文本 
-      vm.snackbarColor = color; //颜色
+      vm.showSnackbar = true; //是否显示 whether to display
+      vm.snackbarText = text; //文本 text
+      vm.snackbarColor = color; //颜色 color
     },
     //获得当前时间
-    // get time
+    // get current time
     getCurrentTime () {
       var cd = new Date()
       vm.currentHour = zeroPadding(cd.getHours(), 2);
@@ -215,6 +216,7 @@ export default {
       vm.day = zeroPadding(cd.getDate(), 2) + '/' + zeroPadding(cd.getMonth() + 1, 2) + "/" + zeroPadding(cd.getFullYear(), 4)
     },
     //overlayer文本名称构造
+    //overlay text name construction
     constructOverlayerTexts () {
       let overlayerTexts = ['data', 'threedHeight', 'mapSeaHeight'];
       for (let i = 0; i < overlayerTexts.length; i++) {
@@ -227,7 +229,7 @@ export default {
       //this.cancelPlaySettingAble = true;//禁用取消按钮 disable cancel button
       this.stopPlayInterval()
     },
-    //规则
+    //规则 rule
     rule (type) {
       return [
         (v) => !!v || type + vm.$vuetify.lang.t("$vuetify.showData.settingDialog.formValidate"),
@@ -238,7 +240,7 @@ export default {
     //loop playback according to the default configuration
     startPlaySetting (ableOverlayerIndexs) {
       //console.log(this.overlayerGroups)
-      if(ableOverlayerIndexs.length == 1){//只有一个播放页
+      if(ableOverlayerIndexs.length == 1){//只有一个播放页 only one play page
         vm.overlayerGroups[ableOverlayerIndexs[0]].activeClass = true
         return
       }
@@ -251,8 +253,10 @@ export default {
       // eslint-disable-next-line no-unused-vars
       function loopPlay () {
         //当前要隐藏的layer是地图海平面高度 停止播放并删除定时 不然会造成地球播放卡顿
+        //The layer to be hidden currently is the sea level height of the map. Stop playing and delete the timing, otherwise it will cause the earth to play stuck.
         if (vm.overlayerGroups[ableOverlayerIndexs[layerPlayIntervalIndex]].icon == 'mdi-waveform') {
           //触发mapSeaHeight组件定义的 stopPlayMapSeaHeight 方法
+          //Trigger the stopPlayMapSeaHeight method defined by the mapSeaHeight component
           vm.$refs['map-sea-height'].$emit('stopPlayMapSeaHeight')
         }
         //循环隐藏/播放
@@ -270,17 +274,21 @@ export default {
         //the current layer to be played is the sea level of the map
         if (vm.overlayerGroups[ableOverlayerIndexs[layerPlayIntervalIndex]].icon == 'mdi-waveform') {
           //触发mapSeaHeight组件定义的 startPlayMapSeaHeight 方法
+          //Trigger the startPlayMapSeaHeight method defined by the mapSeaHeight component
           vm.$refs['map-sea-height'].$emit('startPlayMapSeaHeight')
         }
         layerPlayInterval = setTimeout(loopPlay, Number(vm.overlayerGroups[ableOverlayerIndexs[layerPlayIntervalIndex]].autoPlayTime) * 1000)
       }
     },
     //跳转到指定页面
+    //Jump to the specified page
     toPage (param) {
       //异常处理避免显示错误
+      //Exception handling to avoid displaying errors
       if (vm.$route.path != param) vm.$router.push(param)
     },
     //显示页面导航
+    //Show page navigation
     showNavigation (eleObj) {
       this.$intro().setOptions({
         steps: [
@@ -323,10 +331,10 @@ export default {
         prevLabel: vm.$vuetify.lang.t("$vuetify.showData.screenGuide.upBtn"),
         doneLabel: vm.$vuetify.lang.t("$vuetify.showData.screenGuide.finishBtn"),
       }).onexit(function () {
-        //引导结束再开始播放
+        //引导结束再开始播放 Start playback after booting ends
         //console.log('end')
       }).onbeforeexit(function () {
-        //退出页面导航前确认
+        //退出页面导航前确认 Confirm before exiting page navigation
         return vm.$dialog.confirm({
           text: vm.$vuetify.lang.t('$vuetify.showData.screenGuide.isShowNavigationText'),
           title: vm.$vuetify.lang.t('$vuetify.showData.screenGuide.isShowNavigationTitle'),
@@ -344,17 +352,17 @@ export default {
             }],
         }).then((type) => {
           console.log(type)
-          if (type) {//显示导航
+          if (type) {//显示导航 show navigation
             localStorage.setItem('isShowNavigation', 'show')
-          } else {//不再显示导航
+          } else {//不再显示导航 Never show navigation
             localStorage.setItem('isShowNavigation', 'notShow')
           }
-          //开始播放
+          //开始播放 Start playing
           //vm.startPlaySetting();
         })
       }).start();
     },
-    //获得mapStations页面的html元素
+    //获得mapStations页面的html元素 Get the html element of the mapStations page
     getMapStationPageElements (element) {
       //console.log(localStorage.getItem('isShowNavigation'))
       if (localStorage.getItem('isShowNavigation') != 'notShow') {
@@ -362,7 +370,7 @@ export default {
       }
     },
     stopPlayInterval () {
-      //清除定时
+      //清除定时 clear timing
       if(layerPlayInterval){
         clearInterval(layerPlayInterval);
         layerPlayInterval = null;
@@ -380,24 +388,27 @@ export default {
     savePlaySetting () {
       if(ableOverlayerIndexs.length > 0){
         let index = ableOverlayerIndexs.findIndex(index => this.overlayerGroups[index].icon == 'mdi-waveform')
-        if(index != -1){ //之前参与播放的layer里面有地图海平面高度 则停止播放并删除定时 不然会造成地球播放卡顿
+        //之前参与播放的layer里面有地图海平面高度 则停止播放并删除定时 不然会造成地球播放卡顿
+        //If there is a map sea level in the layer that participated in the playback before, stop the playback and delete the timing, otherwise it will cause the earth playback to freeze.
+        if(index != -1){ 
           //触发mapSeaHeight组件定义的 stopPlayMapSeaHeight 方法
+          //Trigger the stopPlayMapSeaHeight method defined by the mapSeaHeight component
           vm.$refs['map-sea-height'].$emit('stopPlayMapSeaHeight')
         }
-        ableOverlayerIndexs = [] //参与播放的overlayer下标数组
+        ableOverlayerIndexs = [] //参与播放的overlayer下标数组 Array of overlay subscripts participating in playback
       }
       for(let i = 0;i < this.overlayerGroups.length;i++) {
         if(this.overlayerGroups[i].switch) {
           ableOverlayerIndexs.push(i)
         }
       }
-      if(ableOverlayerIndexs.length <= 0){ //没有要播放的overlayer 报错
+      if(ableOverlayerIndexs.length <= 0){ //没有要播放的overlayer 报错 no overlay to play report an error
         this.tips(vm.$vuetify.lang.t("$vuetify.showData.settingDialog.saveError"), 'error')
         this.showPlaySettingDialog = true;
         return
       }
       let index = ableOverlayerIndexs.findIndex(index => this.overlayerGroups[index].autoPlayTime == '' || this.overlayerGroups[index].autoPlayTime <= 0)
-      if(index != -1){ // 时间设置的不合法
+      if(index != -1){ // 时间设置的不合法 Invalid time setting
         this.tips(vm.$vuetify.lang.t("$vuetify.showData.settingDialog.saveError"), 'error')
         this.showPlaySettingDialog = true;
         return
@@ -406,11 +417,12 @@ export default {
 
       layerPlayIntervalIndex = 0;
       //之前显示的overlay设置为不显示 每次只有一个layer在播放，所以只有一个activeClass是true
+      //The previously displayed overlay is set to not be displayed. Only one layer is playing at a time, so only one activeClass is true
       let activeIndex = this.overlayerGroups.findIndex(item => item.activeClass == true)
       this.overlayerGroups[activeIndex].activeClass = false
 
-      this.stopPlayInterval();//之前设置过播放的定时进行清除
-      //将参与播放的下标映射到原来的overlayer数组上
+      this.stopPlayInterval();//之前设置过播放的定时进行清除 Clear the previously set playback timing
+      //将参与播放的下标映射到原来的overlayer数组上 Map the subscripts involved in playback to the original overlay array
       this.startPlaySetting(ableOverlayerIndexs);
     },
     //改变layer的激活状态，第一个设为true,其他为false
@@ -445,7 +457,8 @@ export default {
       clearInterval(layerPlayInterval);
       layerPlayInterval = null;
     }
-    //播放页面的下标设为0    
+    //播放页面的下标设为0
+    //The subscript of the play page is set to 0    
     layerPlayIntervalIndex = 0
   },
   beforeDestroy(){
@@ -461,7 +474,7 @@ export default {
     //array of monitor playback duration Once changed, use the cancel button nearby
     layerAutoPlayTimes: function () {
       //console.log(newVal)
-      //if (!this.cancelPlaySettingAble) this.cancelPlaySettingAble = true //一旦改变就禁用取消按钮
+      //if (!this.cancelPlaySettingAble) this.cancelPlaySettingAble = true //一旦改变就禁用取消按钮 Disable cancel button once changed
       vm.stopPlayInterval()
     }
   }

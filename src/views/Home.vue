@@ -71,7 +71,7 @@
         <v-icon>mdi-email</v-icon>
       </v-btn>
 
-      <!-- 用户 -->
+      <!-- 用户 user-->
       <v-menu offset-y style="z-index:9999">
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon style="color: #fff" v-bind="attrs" v-on="on">
@@ -289,7 +289,7 @@ export default {
         username: '',
         live_camera: true
       },
-      connected: false // websocker 连接状态
+      connected: false // websocket 连接状态 Connection Status
     };
   },
   async created () {
@@ -391,7 +391,7 @@ export default {
       if (vm.$route.path != param) vm.$router.push(param)
     },
     //监听从子组件传递的路由参数
-    // 
+    //Listen for route parameters passed from child components 
     getPath (pathParam) {
       if (pathParam === '/stationDetail') vm.active = 1// 激活tab index  activation tab index
     },
@@ -516,6 +516,7 @@ export default {
       }
     },
     // 获取历史状态记录
+    // Get historical status records
     getPsmslDataList (num, size) {
       let param = {
         page_num: num,

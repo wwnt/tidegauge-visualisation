@@ -72,7 +72,7 @@ import dateTimePicker from '../components/DatetimePicker';
 //plotly obj
 import Plotly from "plotly.js-dist";
 import axiosTool from '../api/axios.js';
-// plotly 配置
+// plotly 配置 configuration
 let plotConfig = {
   displaylogo: false,
   responsive: true,
@@ -162,7 +162,7 @@ export default {
           return
         }
         let data = await axiosTool.get('listPermission')
-        // data为空表示为管理员
+        // data为空表示为管理员 If data is empty, it means administrator
         console.log(data)
         permission = data
         for (var stationId in data) {

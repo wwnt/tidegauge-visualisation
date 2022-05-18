@@ -1,14 +1,15 @@
 //自定义英语翻译文件
+//Custom English translation files
 import en from 'vuetify/es5/locale/en';
 
 export default {
-  ...en, //继承 Vuetify 的翻译
+  ...en, //继承 Vuetify 的翻译 Inherit Vuetify's translation
   login:{
     authorizationTitle:'We value your privacy',
     authorizationInfo:'By clicking “Accept All Cookies”, you agree to the storing of cookies on your device to verify user identity and obtain real-time data。',
     agree:'Accept All Cookies'
   },
-  //添加自己的翻译
+  //添加自己的翻译 Add your own translation
   systemName: 'Tidegauge Management System',
   datetimePicker: {
     date: 'Date',

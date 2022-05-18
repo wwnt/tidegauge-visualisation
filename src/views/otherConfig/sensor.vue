@@ -113,8 +113,8 @@
   </v-container>
 </template>
 <script>
-//import dateTimePicker from "../components/DatetimePicker"; //日期插件
-import axios from "axios"; //基于Promise的HTTP客户端
+//import dateTimePicker from "../components/DatetimePicker"; //日期插件 Date plugin
+import axios from "axios"; //基于Promise的HTTP客户端 Promise-based HTTP client
 import commonCfg from "../../config/common";
 let commonUrl = commonCfg.commonUrl;
 let version = commonCfg.urlVersion;
@@ -124,24 +124,24 @@ export default {
     return {
       //tab: null,
       dialog: false, //是否显示对话框 controller dialog display
-      search: "", //搜索字符串
+      search: "", //搜索字符串 search string
       form: {
-        stationId: "", //站id 
-        sensorName: "", //传感器名称
-        //maintenanceTime: "", //上一次维护时间
+        stationId: "", //站id station id
+        sensorName: "", //传感器名称 sensor name
+        //maintenanceTime: "", //上一次维护时间 last maintenance time
         description: "", //原因描述 maintenance info
         id: -1,
       },
       snackbar: false,
       color: "error",
       text: "",
-      sensorList: [], //所有传感器列表 
+      sensorList: [], //所有传感器列表 List of all sensors
       editedIndex: -1, //新建/修改标志 新建：-1 create/edit new_station:-1
       deviceIds: [], //设备列表 device list 
       sensorNames: [], //传感器名称列表 sensor name list
       stationList: [], //站点ID station id list
-      sensorRecordList: [], // 传感器维护纪录列表 
-      // stationList: [], //站列表
+      sensorRecordList: [], // 传感器维护纪录列表 List of sensor maintenance records
+      // stationList: [], //站列表 station list
     };
   },
   // components: {
@@ -210,14 +210,14 @@ export default {
       ];
     },
     //描述原因的验证规则
-    // 
+    //Validation rules describing the reason
     descriptionRule (type) {
       return [
         (v) =>
           !!v ||
           type + vm.$vuetify.lang.t("$vuetify.sensorConfig.formValidate"), //不能为空 not empty
         (v) =>
-          (!!v && v.length <= 1000) || //不能超过字符限制
+          (!!v && v.length <= 1000) || //不能超过字符限制 Cannot exceed character limit
           vm.$vuetify.lang.t("$vuetify.sensorConfig.charactersRestrictions"),
       ];
     },
@@ -270,6 +270,7 @@ export default {
         vm.sensorList = [];
       }
       //传感器列表里除了有站id再放入站名和identifier
+      //In the sensor list, in addition to the station id, put the station name and identifier
       for (let sensor of vm.sensorList) {
         let res = vm.stationList.filter(station => station.id == sensor.station_id);
         console.log(res)
@@ -280,7 +281,7 @@ export default {
       }
       vm.sensorList = vm.sensorList.filter(v => v.stationName != null)
       //获得下拉框需要的站id和identifier
-
+      //Get the station id and identifier required by the drop-down box
       for (let station of vm.stationList) {
         if (!station.upstream) {//station.upstream_id == 0
           vm.deviceIds.push({ identifier: station.identifier, stationId: station.id });
@@ -331,7 +332,7 @@ export default {
         let res = vm.stationList.filter(station => station.id == sensor.station_id);
         sensor['identifier'] = res[0].identifier;
         //sensor['disabled'] = res[0].upstream_id == 0 ? false : true
-        //upstream:false代表本地连接
+        //upstream:false代表本地连接 stands for local area connection
         sensor['disabled'] = res[0].upstream == false ? false : true
         //console.log(sensor['disabled'])
         console.log(res)
@@ -351,7 +352,7 @@ export default {
         return "error";
       }
     },
-    //提交表单
+    //提交表单 submit Form
     async submitForm () {
       var isEmpty = vm.$refs.form.validate();
       if (!isEmpty) {
@@ -399,9 +400,9 @@ export default {
     //提示工具
     // tips 
     tips (text, color) {
-      vm.text = text; //文本 
-      vm.snackbar = true; //是否显示 show
-      vm.color = color; //颜色 
+      vm.text = text; //文本 text
+      vm.snackbar = true; //是否显示 whether to display
+      vm.color = color; //颜色 color
     },
   },
 };

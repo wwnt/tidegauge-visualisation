@@ -1,10 +1,11 @@
 //自定义中文翻译文件
+//Custom Chinese translation files
 import zhHans from 'vuetify/es5/locale/zh-Hans';
 
 export default {
-  ...zhHans, //继承 Vuetify 的翻译
+  ...zhHans, //继承 Vuetify 的翻译 Inherit Vuetify's translation
 
-  //添加自己的翻译
+  //添加自己的翻译 Add your own translation
   login:{
     authorizationTitle:'我们重视您的隐私',
     authorizationInfo:'点解“接受所有Cookies”，即表示您同意在您的设备上存储Cookie，以用于验证用户身份并获取实时数据。',

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import axios from "axios";//基于Promise的HTTP客户端
+import axios from "axios";//基于Promise的HTTP客户端 Promise-based HTTP client
 import commonCfg from '../../config/common'
 import * as echarts from 'echarts';
 import 'echarts-gl';
@@ -47,7 +47,7 @@ let commonUrl = commonCfg.commonUrl
 let version = commonCfg.urlVersion
 let vm;
 let mapHeightStartYear = 1993, mapHeightEndYear = 2020//海洋高度播放起始年份 sea altitude playback start and end year
-let seaHeightChart//海洋高度图表 
+let seaHeightChart//海洋高度图表  Ocean Height Chart
 let mapSeaHeightData = {}//所有年份的海洋高度数据 sea altitude data for all years
 let mapHeightPlayInterval = null//海洋高度播放定时器 sea altitude play timer
 
@@ -58,11 +58,11 @@ export default {
       clientWidth: 0,
       timePlaySliderValue: mapHeightEndYear,//海洋高度时间播放slider绑定值 sea altitude time play slider binding value
       timePlaySliderOptions: {//海洋高度时间播放slider配置  Sea level time playback slider configuration 
-        width: '400px',//宽度
-        min: mapHeightStartYear,//最小值
-        max: mapHeightEndYear,//最大值
-        interval: 1,//间隔
-        height: 8,//高度
+        width: '400px',//宽度 width
+        min: mapHeightStartYear,//最小值 minimum
+        max: mapHeightEndYear,//最大值 maximum
+        interval: 1,//间隔 interval
+        height: 8,//高度 height
         dotSize: 16,//
         useKeyboard: false,//禁用键盘控制 disable keyboard control
         tooltip: 'always',

@@ -1,5 +1,5 @@
 <template>
-  <!-- 用户配置 -->
+  <!-- 用户配置 User configuration-->
   <v-container fluid>
     <v-row>
       <v-col cols="12" md="3" lg="2">
@@ -17,7 +17,7 @@
         </v-card>
       </v-col>
 
-      <!-- 子组件 -->
+      <!-- 子组件 Subassembly-->
       <v-col cols="12" md="9" lg="10">
         <router-view style="padding-top:0px" :allItems="allItems" @updateMessages="updateMessages">
         </router-view>

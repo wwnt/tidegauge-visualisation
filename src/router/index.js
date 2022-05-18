@@ -135,12 +135,12 @@ const router = new VueRouter({
 });
 
 
-//全局有效 跳转之前执行
+//全局有效 跳转之前执行 Globally valid Execute before jump
 router.beforeEach((to, from, next) => {
   let vm = router.app
-  if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
+  if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限 Determine whether the route requires login permission
       //console.log(to)
-      if (localStorage.token) {  // 判断当前的token是否存在
+      if (localStorage.token) {  // 判断当前的token是否存在 Determine whether the current token exists
           axiosTool
               .validate("validate", { token: localStorage.token })
               .then(res => {
@@ -159,15 +159,15 @@ router.beforeEach((to, from, next) => {
                               }
                               else if (res.role == 1) {
                                   role = 'GA';//"GroupAdmin"; 
-                                  // vm.$root.groupIdForLoginUser = res.groupId;//当前组管理员的组id
+                                  // vm.$root.groupIdForLoginUser = res.groupId;//当前组管理员的组id The group id of the current group administrator
                               } else {
                                   role = 'OU';//"OrdinaryUser"                                  
                               }
                               vm.$root.role = role;
-                              if (to.meta.roles.indexOf(role) != -1) {//角色存在于有权限的角色列表里
+                              if (to.meta.roles.indexOf(role) != -1) {//角色存在于有权限的角色列表里 The role exists in the list of privileged roles
                                   next();
                               } else {
-                                  next(false);//拦截，使其跳回原页面
+                                  next(false);//拦截，使其跳回原页面 Block it and make it jump back to the original page
                               }
                               console.log(vm.$root.role)
                           })
@@ -182,7 +182,7 @@ router.beforeEach((to, from, next) => {
       else {
           next({
               path: '/login',
-              query: { redirect: to.fullPath }  // 将跳转的路由path作为参数，跳转到该路由
+              query: { redirect: to.fullPath }  // 将跳转的路由path作为参数，跳转到该路由 Take the jumped route path as a parameter, jump to the route
           })
       }
   }

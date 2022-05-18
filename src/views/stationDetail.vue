@@ -173,10 +173,11 @@
             </template>
           </v-combobox>
           <!-- 数据类型及所属传感器名称 -->
-          <!--  -->
+          <!--  Data type and sensor name -->
           <!-- <div v-for="item in role === 0 ? permissionItems : sensorItems" :key="item.name"> -->
           <div v-for="item in  sensorItems" :key="item.name">
             <!-- 在选择列表里才进行图表展示 -->
+            <!-- Only display the chart in the selection list -->
             <v-row v-show="
                 selectedItemNames.filter((name) => name == item.name).length > 0
               " style="width:20vw">
@@ -220,10 +221,10 @@
   </v-container>
 </template>
 <script>
-import L from "leaflet"; //leaflet地图obj
+import L from "leaflet"; //leaflet地图obj leaflet map obj
 import Plotly from "plotly.js-dist"; //plotly obj
-import axios from "axios"; //基于Promise的HTTP客户端
-import qs from "qs"; //处理提交的表单数据 
+import axios from "axios"; //基于Promise的HTTP客户端 Promise-based HTTP client
+import qs from "qs"; //处理提交的表单数据 Handling submitted form data
 import commonCfg from "../config/common";
 import mapCfg from "../config/map";
 let webSocket = commonCfg.webSocket
@@ -267,44 +268,45 @@ export default {
   data () {
     return {
       // tips
-      showSnackbar: false, //是否显示通知  
-      color: "error", //通知的颜色 
-      text: "", //通知的内容 
+      showSnackbar: false, //是否显示通知 whether to show notifications
+      color: "error", //通知的颜色 notification color
+      text: "", //通知的内容 Content of the notice
 
       form: {
-        latlng: "", //经纬度
-        name: "", //站名
-        location: "", //位置
-        partner: "", //伙伴 
-        contact: "", //联系方式 
-        id: -1, //站id
+        latlng: "", //经纬度 latitude and longitude
+        name: "", //站名 station name
+        location: "", //位置 location 
+        partner: "", //伙伴 partner
+        contact: "", //联系方式 Contact information
+        id: -1, //站id station id
       },
-      showStationId: '', //当前显示站点ID
-      ip: "", //ip地址
-      paramId: "", //路径参数 传递的是站id url param (station id)
-      editIndex: 1, // 新建/修改站的标志 -1代表新建 其它代表编辑 -1:create other:edit
-      componentKey: 0, //组件key
+      showStationId: '', //当前显示站点ID Currently showing station ID
+      ip: "", //ip地址 ip address
+      paramId: "", //路径参数 path parameter 传递的是站id url param (station id)
+      editIndex: 1, // 新建/修改站的标志 New/modified station flag -1代表新建 其它代表编辑 -1:create other:edit
+      componentKey: 0, //组件key component key
       param: '', // websocker param
-      stationList: [], //所有站点数据列表 
+      stationList: [], //所有站点数据列表 List of all station data
       identifier: "", //设备id /device id
       station_id: '', // 站台Id /station id
       sensorItems: [], //设备下数据列表 sensor list in device
       newBtnAble: false, //是否可以点击新建按钮 control click create button
       showMap: {}, //保存当前站点中设备数据的最新值 save new data with choosed station 
-      itemNameList: [], //数据名称列表 
-      selectedItemNames: [], //已选择的数据名称列表 
+      itemNameList: [], //数据名称列表 List of data names
+      selectedItemNames: [], //已选择的数据名称列表 List of selected data names
       showMenuProps: {}, // 控制下拉菜单的显示和隐藏 Control the display and hide of the drop-down menu
-      permissionDatas: {}, //权限数据列表 
+      permissionDatas: {}, //权限数据列表 Permission data list
       permissionItems: [], // 普通用户权限下的数据列表  ordinary user item data permission
       role: parseInt(localStorage.role), //当前登录用户的权限 login user role
     };
   },
   props: ["wsConn"],
-  //页面销毁时调用
+  //页面销毁时调用 Called when the page is destroyed
   destroyed: function () {
     //关闭链接 不然会报No DOM element with id '×××' exists on the page
+    //Close the link or it will be reported No DOM element with id '×××' exists on the page
     wsConn.onclose = undefined;
-    wsConn.close(1000); //参数1000 代表正常关闭  1000 is close
+    wsConn.close(1000); //参数1000 代表正常关闭 Parameter 1000 means normal shutdown
   },
   created () {
     vm = this;
@@ -330,7 +332,7 @@ export default {
   },
   methods: {
     //初始化地图
-
+    //Initialize the map
     initMap () {
       leafMap = L.map("map-container-dl", {
         center: mapCfg.center,
@@ -351,6 +353,7 @@ export default {
       ).addTo(leafMap);
     },
     //初始化plotly图表
+    //Initialize plotly chart
     initChart (unit, id, xData, yData) {
       console.log(id)
       console.log(unit)
@@ -388,7 +391,7 @@ export default {
         plotConfig
       );
     },
-    //获得所有站点数据
+    //获得所有站点数据 Get all station data
     async getAllStations () {
       let res = await axios.get(`${commonUrl}listStation${version}`);
       try {
@@ -400,7 +403,7 @@ export default {
         vm.stationList = [];
       }
     },
-    //编辑站点数据
+    //编辑站点数据 edit station data
     async editStation (obj) {
       let res = await axios.post(`${commonUrl}editStation${version}`, obj);
       try {
@@ -410,7 +413,7 @@ export default {
         return null;
       }
     },
-    //获得数据列表
+    //获得数据列表 get data list
     async getAllItems () {
       if (!vm.station_id) {
         vm.sensorItems = [];
@@ -450,7 +453,7 @@ export default {
       }
     },
 
-    //规则判断 为空时提示错误信息
+    //规则判断 为空时提示错误信息 When the rule is judged to be empty, it will prompt an error message
     rule (type) {
       return [
         (v) =>
@@ -487,16 +490,16 @@ export default {
           if (spot.id === vm.paramId) {
             vm.editIndex = 1; //表示正在编辑marker而非新建 1 means edit marker not create
             vm.showFormDetail(spot); //显示form表单详情 show form info
-            vm.ip = spot.ip_addr; //显示ip
-            //vm.componentKey += 1; //改变组件id 可以销毁旧组件并创建一个新组件
+            vm.ip = spot.ip_addr; //显示ip show ip
+            //vm.componentKey += 1; //改变组件id 可以销毁旧组件并创建一个新组件 Change the component id to destroy the old component and create a new one
             vm.showMap = {};
             // wsConn.onclose = undefined;
-            // wsConn.close(1000); //参数1000 代表正常关闭 1000 close
+            // wsConn.close(1000); //参数1000 代表正常关闭 Parameter 1000 means normal shutdown
             vm.sendItemsToWS(spot.id);
           }
         }
         let latlngs = spot.location.position.split(",");
-        //给marker绑定popup
+        //给marker绑定popup Bind popup to marker
         let marker = L.marker([latlngs[0], latlngs[1]], {
           icon: perIcon,
         }).addTo(leafMap);
@@ -525,10 +528,10 @@ export default {
           }
           vm.showStationId = spot.id
           vm.editIndex = 1; //表示正在编辑marker而非新建 1 means edit marker not create
-          vm.showFormDetail(spot); //显示form表单详情
+          vm.showFormDetail(spot); //显示form表单详情 show form detail
           vm.ip = spot.ip_addr; //显示ip show ip
-          //语言切换后 改变 删除/delete 按钮名字的中英文
-          // 
+          //语言切换后 改变 删除 按钮名字的中英文
+          //After the language switch, change the delete button name in Chinese and English
           if (
             vm.$vuetify.lang.t("$vuetify.stationDetail.btn.del") !== delBtnName
           ) {
@@ -542,21 +545,21 @@ export default {
           if (vm.role === 0) marker.closePopup(); //普通用户的话就关闭popup  close popup when is ordinary user 
           console.log(spot.id)
           wsConn.send(null)
-          vm.componentKey += 1; //改变组件id 可以销毁旧组件并创建一个新组件
+          vm.componentKey += 1; //改变组件id 可以销毁旧组件并创建一个新组件 Change the component id to destroy the old component and create a new one
 
           vm.showMap = {};
           vm.sendItemsToWS(spot.id);
         });
-        //所有marker放进数组
+        //所有marker放进数组 All markers are put into an array
         markers.push(marker);
       }
     },
-    //新建一个站
+    //新建一个站 create a new station
     createStation () {
-      vm.editIndex = -1; //新建站的标志
+      vm.editIndex = -1; //新建站的标志 new station sign
       vm.showStationId = -1
-      vm.form.id = -1; //新建站没有站id 设为-1
-      vm.resetForm(); //清空form表单
+      vm.form.id = -1; //新建站没有站id 设为-1 The new station has no station id set to -1
+      vm.resetForm(); //清空form表单 clear form
       vm.$refs.form.resetValidation(); //清空验证 clear validation
       if (newMarker) {
         //之前有新建marker，就删除，避免产生多个
@@ -572,7 +575,7 @@ export default {
         // create marker 
         newMarker = L.marker([ev.latlng.lat, ev.latlng.lng], {
           icon: newIcon,
-          draggable: true, //可拖拽 
+          draggable: true, //可拖拽 draggable
         }).addTo(leafMap);
         //绑定marker移动事件
         // add move event to marker
@@ -610,7 +613,7 @@ export default {
       }
       vm.newBtnAble = false; //可以点击新建按钮 create button abled
     },
-    //删除站
+    //删除站 delete station
     async del (id, marker) {
       vm.$dialog
         .confirm({
@@ -680,7 +683,7 @@ export default {
         })
 
     },
-    // 删除站点
+    // 删除站点 delete station
     async deleteStation (id, marker) {
       if (vm.sensorItems.length > 0) {
         vm.tips(
@@ -689,7 +692,7 @@ export default {
           ),
           "error"
         );
-        marker.closePopup(); //关闭popup
+        marker.closePopup(); //关闭popup close popup
         return;
       }
       let res = await axios.post(
@@ -707,22 +710,22 @@ export default {
         vm.$vuetify.lang.t("$vuetify.stationDetail.tips.delSuccess"),
         "success"
       );
-      vm.editIndex = -1; //删除成功后 重新将标志设为新建标志
+      vm.editIndex = -1; //删除成功后 重新将标志设为新建标志 After the deletion is successful, reset the flag to the new flag
       let markerObj = markers.filter((m) => m == marker);
       let markerIndex = markers.indexOf(markerObj[0]);
-      markers.splice(markerIndex, 1); //数组删除marker对象
-      marker.closePopup(); //关闭popup
-      leafMap.removeLayer(marker); //地图删除layer
-      vm.resetForm(); //重置form
-      vm.$refs.form.resetValidation(); //清空验证
+      markers.splice(markerIndex, 1); //数组删除marker对象 Array delete marker object
+      marker.closePopup(); //关闭popup close popup
+      leafMap.removeLayer(marker); //地图删除layer delete layer
+      vm.resetForm(); //重置form reset form 
+      vm.$refs.form.resetValidation(); //清空验证 reset validation
     },
-    //提交表单
+    //提交表单 submit form
     async submit () {
       var isEmpty = vm.$refs.form.validate();
       if (!isEmpty) {
         return;
       }
-      let newData = vm.form; //JSON.parse(JSON.stringify(vm.form)); //JSON.parse，会帮我们开辟一个新的地址空间
+      let newData = vm.form; //JSON.parse(JSON.stringify(vm.form)); //JSON.parse，会帮我们开辟一个新的地址空间 help us open up a new address space
       let obj = {
         name: newData.name,
         location: { name: newData.location, position: newData.latlng },
@@ -752,7 +755,7 @@ export default {
         }
         markers = [];
         vm.showMarkers(); //重新显示所有marker show all marker
-        vm.newBtnAble = false; //可以点击新建按钮 
+        vm.newBtnAble = false; //可以点击新建按钮 Click the New button
       } else {
         //编辑站
         // edit station 
@@ -773,12 +776,12 @@ export default {
         // edit successful
         await vm.getAllStations(); // 获取站列表 get station list
         for (let marker of markers) {
-          //移除所有marker
+          //移除所有marker remove all markers
           marker.closePopup();
           leafMap.removeLayer(marker);
         }
         markers = [];
-        vm.showMarkers(); //重新显示所有marker
+        vm.showMarkers(); //重新显示所有marker Redisplay all markers
       }
       vm.tips(
         vm.$vuetify.lang.t("$vuetify.stationDetail.tips.saveSuccess"),
@@ -809,7 +812,7 @@ export default {
       vm.ip = "";
       vm.identifier = "";
     },
-    //通知提示工具
+    //通知提示工具 notification tool
     tips (text, color) {
       vm.text = text;
       vm.showSnackbar = true;
@@ -820,7 +823,7 @@ export default {
     removeSelectedItemName (item) {
       vm.selectedItemNames.splice(vm.selectedItemNames.indexOf(item), 1);
       vm.selectedItemNames = [...vm.selectedItemNames];
-      vm.showMenuProps = { value: false }; //隐藏下拉菜单 
+      vm.showMenuProps = { value: false }; //隐藏下拉菜单 Hide dropdown menu
     },
     //获取相邻两个数据的差值
     // get the difference between two adjacent data
@@ -848,7 +851,7 @@ export default {
         vm.permissionDatas = {};
       }
     },
-    //给websocket发送数据列表以获得相应数据
+    //给websocket发送数据列表以获得相应数据 Send a list of data to websocket to get the corresponding data
     async sendItemsToWS (stationId) {
       console.log(stationId)
       vm.itemNameList = [];
@@ -883,7 +886,7 @@ export default {
       }
       if (vm.itemNameList.length <= 0) {
         vm.param = ''
-        //  wsConn.send(null);//发送null 意思是取消订阅
+        //  wsConn.send(null);//发送null 意思是取消订阅 means unsubscribe
         return;
       }
       //初始化图表
@@ -964,7 +967,7 @@ export default {
 
       }
     },
-    //设置websocket连接
+    //设置websocket连接 Set up websocket connection
     setWSConn () {
       // window.wsConn = new WebSocket(webSocket);
       wsConn = new WebSocket(webSocket);
@@ -973,14 +976,14 @@ export default {
       wsConn.onerror = this.handleWSError;
       wsConn.onmessage = this.handleWSMessage;
     },
-    //websocket链接成功
+    //websocket链接成功 websocket connection successful
     handleWSOpen () {
       console.log("connection success...");
       if (this.param != '') {
         wsConn.send(JSON.stringify(this.param));
       }
     },
-    //websocket链接失败
+    //websocket链接失败 websocket connection failed
     // closeEvent:
     // code: 4001, reason: "Unauthorized"
     // code: 4002, reason: "Internal Server Error"
@@ -998,13 +1001,13 @@ export default {
         //   vm.$router.push('/login');
         // }, 1000);
       } else if (evt.code === 4002) {
-        //服务器内部错误
+        //服务器内部错误 Internal server error
         setTimeout(vm.setWSConn, 3000);
       } else {
         setTimeout(vm.setWSConn, 2000);
       }
     },
-    //关闭websocket链接
+    //关闭websocket链接 close websocket connection
     handleWSError (evt) {
       console.log(evt);
       wsConn.close();
@@ -1093,6 +1096,7 @@ function sleep (ms) {
 </script>
 <style scoped>
 /* 可以在选择器中使用/deep/或>>>来创建应用于子组件内部元素的样式规则 */
+/* You can use /deep/ or >>> in selectors to create style rules that apply to elements inside child components */
 ::v-deep .col {
   padding-top: 0px;
   padding-bottom: 0px;

@@ -1,10 +1,11 @@
 <!-- 站点显示页面，用于显示所有站的位置 -->
+<!-- station display page, which shows the location of all stations -->
 <template>
   <v-container fluid class="pa-0">
     <!-- <v-card> -->
-    <!-- 地图div -->
+    <!-- 地图div map div -->
     <div id="map-container" style="min-height: 91vh"></div>
-    <!-- 搜索框 -->
+    <!-- 搜索框 search bar-->
     <v-text-field solo dense style="position: absolute; top: 2%; right: 1%"
       :placeholder="$vuetify.lang.t('$vuetify.stationList.searchPlaceholder')" @keyup.enter="search"
       v-model="searchByName" append-icon="mdi-arrow-right-circle" @click:append="search">
@@ -32,16 +33,16 @@
   </v-container>
 </template>
 <script>
-import L from "leaflet";//leaflet地图obj
-import axios from "axios";//基于Promise的HTTP客户端
+import L from "leaflet";//leaflet地图obj leaflet map obj
+import axios from "axios";//基于Promise的HTTP客户端 Promise-based HTTP client
 import commonCfg from '../config/common'
 import mapCfg from '../config/map'
 
 let commonUrl = commonCfg.commonUrl
 let version = commonCfg.urlVersion
-let vm;// vue实例
+let vm;// vue实例 vue instance
 let wsConn
-let leafMap; // 地图实例
+let leafMap; // 地图实例 map instance
 let icon = L.icon({
   iconUrl: require("../../public/tidegauge.png"),
   iconSize: [25, 27],
@@ -52,15 +53,15 @@ let offlineIcon = L.icon({
   iconSize: [25, 27],
   //iconAnchor: [22, 94],
 });
-let markerMap = new Map;// 存放地图marker
-let popupList = [];//popup列表
+let markerMap = new Map;// 存放地图marker put map marker
+let popupList = [];//popup列表 popup list
 export default {
   data () {
     return {
-      stationList: [], // 站列表
-      searchByName: "", // 站名
-      stationName: '', //popup站点名称
-      stationLocationName: '',// popup站点名称
+      stationList: [], // 站列表 station list
+      searchByName: "",  
+      stationName: '',  
+      stationLocationName: '', 
       email: '', // popup email
       documentId: 0,
       sensorItems: [], // 传感器数据 sensor list
@@ -83,6 +84,7 @@ export default {
   },
   methods: {
     //初始化地图
+    //Initialize the map
     initMap () {
       leafMap = L.map("map-container", { attributionControl: false }).setView(
         mapCfg.center,
@@ -154,7 +156,7 @@ export default {
         .setContent(content);
       return popup
     },
-    //设置websocket连接
+    //设置websocket连接 Set up websocket connection
     async setWSConn () {
       wsConn = window.wsConn;
       console.log(wsConn)
@@ -168,7 +170,7 @@ export default {
       wsConn.onmessage = this.handleWSMessage;
 
     },
-    //websocket链接失败
+    //websocket链接失败 websocket connection failed
     // closeEvent:
     // code: 4001, reason: "Unauthorized"
     // code: 4002, reason: "Internal Server Error"
@@ -184,7 +186,7 @@ export default {
           vm.$router.push('/login');
         }, 1000);
       } else if (evt.code === 4002) {
-        //服务器内部错误
+        //服务器内部错误 Internal server error
         setTimeout(vm.setWSConn, 3000);
       } else {
         setTimeout(vm.setWSConn, 2000);
@@ -244,7 +246,7 @@ export default {
       }
 
     },
-    //websocket链接成功
+    //websocket链接成功 websocket connection successful
     handleWSOpen () {
       console.log("connection success...");
     },
@@ -300,7 +302,7 @@ export default {
       // there are multiple stations with duplicate station names ,Traversing the array will only display the data of the last station
       // let popupObj = popupFilterRes[popupFilterRes.length - 1];
       popup.openOn(leafMap); //打开popup
-      leafMap.panTo(popup.getLatLng()); //将该点的坐标设为地图中心 setview as search marker
+      leafMap.panTo(popup.getLatLng()); //将该点的坐标设为地图中心 Set the coordinates of the point as the center of the map
       //绑定点击事件
       // add click event
       // document
@@ -312,7 +314,7 @@ export default {
     //跳转到站点详情页面
     // to stationDetail page
     detail (id) {
-      vm.$emit('getPath', '/stationDetail')//第一个参数是在父组件on监听的方法 
+      vm.$emit('getPath', '/stationDetail')//第一个参数是在父组件on监听的方法 The first parameter is the method to listen on in the parent component on
       vm.$router.push("/stationDetail/" + id);
     },
 
@@ -327,7 +329,6 @@ function sleep (ms) {
   color: blue;
 } */
 
-/* 可以在选择器中使用/deep/或>>>来创建应用于子组件内部元素的样式规则 */
 ::v-deep .leaflet-pane {
   z-index: 0;
 }

@@ -88,6 +88,7 @@ export default {
         axiosTool
           .login('token', this.form)
           //在使用另一个函数调用它时从promise中获取值
+          //Get value from promise when calling it with another function
           .then(res => {
             if (res) {
               document.cookie = 'token=' + res.access_token + '; path=/' //token放进cookie里 token in cookie

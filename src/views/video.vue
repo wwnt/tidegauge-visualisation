@@ -93,16 +93,16 @@ export default {
       // camera list
       cameraItems: [],
       // 站点摄像头
-      // 
+      //station camera
       cameraMap: new Map,
       valid: '',
       dialog: false,
       snackbar: false,
-      live_camera: false,//实时快照权限
+      live_camera: false,//实时快照权限 Real time snapshot permissions
       title: '',
       color: '',
       permissionDatas: new Map,
-      // 查询表单
+      // 查询表单 query form
       historyOptionsForm: {
         stationId: '',
         cameraId: '',
@@ -111,7 +111,7 @@ export default {
         end: '',
       },
       role: parseInt(localStorage.role),
-      // 查询按钮loading
+      // 查询按钮loading query button
       loading: false,
     };
   },
@@ -187,7 +187,7 @@ export default {
           name: this.historyOptionsForm.cameraId
         }
         this.images = []
-        // 根据类型获取数据
+        // 根据类型获取数据 Get data by type
         if (this.historyOptionsForm.type == 1) {
           // 实时快照
           // real time img
@@ -260,7 +260,7 @@ export default {
       }
 
     },
-    // 根据摄像头权限判断是否禁用查询方式
+    // 根据摄像头权限判断是否禁用查询方式 Judge whether to disable the query method according to the camera permission
     cameraChange (camera) {
       if (this.role == 0) {
         if (!this.live_camera) {
@@ -297,7 +297,7 @@ export default {
 
   }
 }
-// byte转base64
+// byte转base64 Byte to Base64
 function arrayBufferToBase64 (buffer) {
   var binary = '';
   var bytes = new Uint8Array(buffer);

@@ -169,9 +169,9 @@
 </template>
 <script>
 
-import treeSelect from 'ant-design-vue/lib/tree-select'; // 加载 JS
-import 'ant-design-vue/lib/tree-select/style/css'; // 加载
-import 'ant-design-vue/lib/input/style/css'; // 加载 CSS
+import treeSelect from 'ant-design-vue/lib/tree-select'; // 加载 JS load js
+import 'ant-design-vue/lib/tree-select/style/css'; // 加载 load
+import 'ant-design-vue/lib/input/style/css'; // 加载 CSS load css
 import axiosTool from '@/api/axios.js';
 var vm = null;
 // 权限 roles
@@ -349,6 +349,7 @@ export default {
     },
     /**
      * 处理item数据用于在treeSelect中显示
+     * Process item data for display in treeSelect
      * transform item data
      * {
      *  value: '0-0-0', 
@@ -357,6 +358,7 @@ export default {
      * }
      * 
      * 参考Ant Design of Vue tree Select
+     * See Ant Design of Vue tree Select
      *  */
     initItem (data) {
       console.log(this.items)
@@ -581,7 +583,7 @@ export default {
       console.log(test)
       return test;
     },
-    // 新建
+    // 新建 new
     add () {
       this.userInfoDialog = true;
       this.disable = false
@@ -598,7 +600,7 @@ export default {
       this.type = 'add';
       if (vm.$refs.form) vm.$refs.form.resetValidation(); //清空验证 clear verification
     },
-    // 修改
+    // 修改 update
     async edit (item) {
 
       console.log(item)
@@ -622,7 +624,7 @@ export default {
     // 更新item权限
     // update item permission
     updateItemPermission (msg) {
-      // 修改item权限
+      // 修改item权限 Modify item permissions
       if (this.form.itemPermission.length > 0) {
         var permission = this.formateSelectItems(this.form.itemPermission)
         console.log(this.clickUser)
@@ -656,7 +658,7 @@ export default {
         })
       }
     },
-    // 更新摄像头权限
+    // 更新摄像头权限 Update camera permissions
     updateCameraPermission (msg) {
       var param = {
         username: this.clickUser,
@@ -676,7 +678,7 @@ export default {
         }
       })
     },
-    // 删除用户
+    // 删除用户 delete users
     deleteUser (item) {
       this.$dialog.confirm({
         text: this.$vuetify.lang.t('$vuetify.account.confirmDelUser'),

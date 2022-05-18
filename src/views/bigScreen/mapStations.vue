@@ -6,7 +6,7 @@
     <!-- map -->
     <div id="map-container" style="min-height: 90vh;"></div>
 
-    <!-- gloss station marker popup 内容 -->
+    <!-- gloss station marker popup 内容 content -->
     <div hidden>
       <v-card v-for="station of glossData" :key="station.name" :ref="station.name" class="poup">
         <v-card-title class="white--text">
@@ -205,6 +205,7 @@
       </v-card>
     </div>
     <!-- carousel 暂停/开始播放按钮 -->
+    <!-- carousel pause/start playback button -->
     <div class="carousel-play-btn-position" id="showCustomStations">
       <v-btn icon @click="showCarousel = !showCarousel;showCustomStation()">
         <v-icon style="color:white" size="40">
@@ -212,6 +213,7 @@
       </v-btn>
     </div>
     <!-- 自己站的数据 carousel显示 -->
+    <!-- own station data carousel display -->
     <div class="data-carousel-position" v-if="showCarousel">
       <!-- 传感器的历史纪录值 -->
       <!-- sensor's historical record value -->
@@ -352,6 +354,7 @@
     </v-dialog>
       
       <!--站的数据情况展示 -->
+      <!-- station data display -->
       <div class="station-data-info">
         <p>{{stationsInfo}}</p>
       </div>
@@ -361,7 +364,7 @@
 <script>
 import L from "leaflet";//leaflet地图obj leaflet map 
 import mapCfg from '../../config/map'
-import axios from "axios";//基于Promise的HTTP客户端
+import axios from "axios";//基于Promise的HTTP客户端 Promise-based HTTP client
 import commonCfg from '../../config/common'
 let vm;
 let commonUrl = commonCfg.commonUrl
@@ -378,9 +381,9 @@ let psmslStationMap = {}//保存psmsl站的map Save the map of the psmsl station
 export default {
   data () {
     return {
-      // 站列表
+      // 站列表 station list
       stationList: [],
-      // 传感器数据
+      // 传感器数据 sensor items
       sensorItems: [],
       // 控制轮播展示
       // control carousel display
@@ -391,7 +394,7 @@ export default {
       // 轮播数组
       // carousel array
       carouselItem: [],
-      glossData: [],//gloss数据
+      glossData: [],//gloss数据 gloss data
       glossItems: [],//选择播放的gloss数据 select the gloss data to be played 
       //ioc图例
       // ioc lenged
@@ -406,7 +409,7 @@ export default {
         m4: { src: require("../../../public/m4.png"), value: '-10~-5' },
         m6: { src: require("../../../public/m6.png"), value: '<-10' }
       },
-      // ioc站点数据
+      // ioc站点数据 ioc station datas
       iocStationList: [],
       // 表单中选择的ioc站点
       // selected ioc station
@@ -414,8 +417,8 @@ export default {
       //ioc站点信息
       // ioc station information
       iocStationInfo: {
-        name: '',//ioc站点名
-        currentValue: '',//当前值 
+        name: '',//ioc站点名 ioc station name
+        currentValue: '',//当前值 current value
         icon: '',//表示变化的图标 change icon
         data: [],//历史数据 history data
         change: '',//变化值 change value

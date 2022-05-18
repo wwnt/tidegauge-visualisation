@@ -19,14 +19,14 @@
 </template>
 
 <script>
-import axios from "axios";//基于Promise的HTTP客户端
+import axios from "axios";//基于Promise的HTTP客户端 Promise-based HTTP client
 import commonCfg from '../../config/common'
 let commonUrl = commonCfg.commonUrl
 let version = commonCfg.urlVersion
 import * as echarts from 'echarts';
 import 'echarts-gl';
 let vm;
-let globeChart;//3d地球chart
+let globeChart;//3d地球chart 3d earth chart
 let getEarthSeaHeightInterval = null//获得3d地球海平面高度的定时  get the timing of 3d earth sea level height
 export default {
   data () {
@@ -100,7 +100,7 @@ export default {
           }
         },
         // 地球setting
-        // setting 
+        // earth setting 
         globe: {
           baseTexture: require("../../../public/world.topo.bathy.200401.jpg"),
           heightTexture: require("../../../public/world.topo.bathy.200401.jpg"),
@@ -124,7 +124,7 @@ export default {
             minHeight: 0.2,
             label: {
               fontSize: 12,
-              show: this.showLabel, // 显示bar label
+              show: this.showLabel, // 显示bar label show bar label
               position: 'right',
               formatter: '{b}', // 显示格式 label formate 
               textStyle: {
@@ -196,7 +196,7 @@ export default {
       })
     },
     //销毁获得海平面高度的定时
-    // destroy timing
+    // Destroy the timing for obtaining sea level altitude
     clearGetSeaHeightInterval () {
       if (getEarthSeaHeightInterval) {
         clearInterval(getEarthSeaHeightInterval)
@@ -207,6 +207,7 @@ export default {
   },
   // destroyed(){
   //    //清除获得3d地球海平面的高度的定时
+        //Clear timing to get altitude of 3d earth sea level
   //   if (getEarthSeaHeightInterval) {
   //     clearInterval(getEarthSeaHeightInterval)
   //     getEarthSeaHeightInterval = null
