@@ -1,5 +1,7 @@
-var commonUrl = 'https://test.navi-tech.net/api/tgm/'
-var wsUrl = 'wss://test.navi-tech.net/tmws/'
+//this is the api config file
+var commonUrl = 'https://test.navi-tech.net/api/tgm/'//this is the generic api url
+var wsUrl = 'wss://test.navi-tech.net/tmws/'//this is the generic websocket url
+//When modifying, you only need to modify the above two addresses corresponding to the server background address.
 
 module.exports = {
   commonUrl: commonUrl,//api路径 api path
