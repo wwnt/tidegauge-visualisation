@@ -228,8 +228,7 @@ import qs from "qs"; //处理提交的表单数据 Handling submitted form data
 import commonCfg from "../config/common";
 import mapCfg from "../config/map";
 let webSocket = commonCfg.webSocket
-let commonUrl = commonCfg.commonUrl;
-let version = commonCfg.urlVersion;
+
 let vm;
 let wsConn = null;
 let leafMap, //地图Object map
@@ -393,7 +392,7 @@ export default {
     },
     //获得所有站点数据 Get all station data
     async getAllStations () {
-      let res = await axios.get(`${commonUrl}listStation${version}`);
+      let res = await axios.get(commonCfg.listStation);
       try {
         vm.stationList = res.data;
         if (!vm.stationList) vm.stationList = [];
@@ -405,7 +404,7 @@ export default {
     },
     //编辑站点数据 edit station data
     async editStation (obj) {
-      let res = await axios.post(`${commonUrl}editStation${version}`, obj);
+      let res = await axios.post(commonCfg.editStation, obj);
       try {
         return res.data;
       } catch (error) {
@@ -427,7 +426,7 @@ export default {
               station_id: vm.station_id,
             },
           };
-      let res = await axios.get(`${commonUrl}listItem${version}`, param);
+      let res = await axios.get(commonCfg.listItem, param);
       try {
         if (!res.data) {
           vm.sensorItems = [];
@@ -696,7 +695,7 @@ export default {
         return;
       }
       let res = await axios.post(
-        `${commonUrl}delStation${version}`,
+        commonCfg.delStation,
         qs.stringify({ id: id })
       );
       if (!res || res.data != "ok") {
@@ -841,7 +840,7 @@ export default {
     // get login user's data permission list
     async getPermissions () {
       let res = await axios.get(
-        `${commonUrl}listPermission${version}`
+        commonCfg.listPermission
       );
       console.log(res);
       try {

@@ -21,8 +21,7 @@
 <script>
 import axios from "axios";//基于Promise的HTTP客户端 Promise-based HTTP client
 import commonCfg from '../../config/common'
-let commonUrl = commonCfg.commonUrl
-let version = commonCfg.urlVersion
+
 import * as echarts from 'echarts';
 import 'echarts-gl';
 let vm;
@@ -64,7 +63,7 @@ export default {
     // 获取海洋高度数据
     // get sea height data
     async getSeaHeight () {
-      let v = await axios.get(`${commonUrl}seaHeightData${version}`)
+      let v = await axios.get(commonCfg.seaHeightData)
       var data = v.data.map(function (dataItem) {
         let color
         if (dataItem.value[2] < 0) {

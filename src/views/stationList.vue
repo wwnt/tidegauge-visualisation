@@ -38,8 +38,6 @@ import axios from "axios";//基于Promise的HTTP客户端 Promise-based HTTP cli
 import commonCfg from '../config/common'
 import mapCfg from '../config/map'
 
-let commonUrl = commonCfg.commonUrl
-let version = commonCfg.urlVersion
 let vm;// vue实例 vue instance
 let wsConn
 let leafMap; // 地图实例 map instance
@@ -253,7 +251,7 @@ export default {
     //获得站列表
     // get station list
     async getAllStations () {
-      let res = await axios.get(`${commonUrl}listStation${version}`);
+      let res = await axios.get(commonCfg.listStation);
       try {
         if (!res.data) {
           vm.stationList = [];
@@ -274,7 +272,7 @@ export default {
           station_id: station_id,
         },
       };
-      let res = await axios.get(`${commonUrl}listItem${version}`, param);
+      let res = await axios.get(commonCfg.listItem, param);
       //console.log(res);
       vm.sensorItems = [];
       try {

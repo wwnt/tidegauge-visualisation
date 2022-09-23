@@ -43,8 +43,7 @@ import 'echarts-gl';
 import 'echarts/map/js/world'
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
-let commonUrl = commonCfg.commonUrl
-let version = commonCfg.urlVersion
+
 let vm;
 let mapHeightStartYear = 1993, mapHeightEndYear = 2020//海洋高度播放起始年份 sea altitude playback start and end year
 let seaHeightChart//海洋高度图表  Ocean Height Chart
@@ -244,7 +243,7 @@ export default {
     // get sea height data
     async getMapSeaHeightData (time) {
       let timeYear = `${time}_01_01`
-      let res = await axios.get(`${commonUrl}getSeaLevelList${version}`, { params: { tableName: timeYear } })
+      let res = await axios.get(commonCfg.getSeaLevelList, { params: { tableName: timeYear } })
       try {
         if (!res.data) {
           return [];

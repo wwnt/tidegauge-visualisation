@@ -6,7 +6,6 @@ import commonCfg from "../config/common";
 // 配置API接口地址
 // Configure the API interface address
 let commonUrl = commonCfg.commonUrl;
-let version = commonCfg.urlVersion;
 
 // http request 拦截器
 // http request interceptor
@@ -56,7 +55,7 @@ axios.interceptors.response.use(
 function apiAxios(method, url, params) {
   return axios({
     method: method,
-    url: `${url}${version}`,
+    url: url,
     data: method === 'POST' || method === 'PUT' ? params : null, //作为请求正文发送的数据 Data sent as request body
     params: method === 'GET' || method === 'DELETE' ? params : null, //与请求一起发送的URL参数 URL parameters sent with the request
     baseURL: commonUrl,
@@ -91,7 +90,7 @@ function apiAxios(method, url, params) {
 }
 function getImage(method, url, params) {
   return axios({
-    url:`${url}${version}`,
+    url: url,
     method: method,
     responseType: 'arraybuffer',
     baseURL: commonUrl,

@@ -116,8 +116,7 @@
 //import dateTimePicker from "../components/DatetimePicker"; //日期插件 Date plugin
 import axios from "axios"; //基于Promise的HTTP客户端 Promise-based HTTP client
 import commonCfg from "../../config/common";
-let commonUrl = commonCfg.commonUrl;
-let version = commonCfg.urlVersion;
+
 let vm;
 export default {
   data () {
@@ -167,7 +166,7 @@ export default {
     //获得所有站点数据
     // get all station list
     async getAllStations () {
-      let res = await axios.get(`${commonUrl}listStation${version}`);
+      let res = await axios.get(commonCfg.listStation);
       try {
         console.log(res)
         vm.stationList = res.data;
@@ -258,7 +257,7 @@ export default {
     //获得传感器列表
     // get sensor list 
     async getSensorList () {
-      let res = await axios.get(`${commonUrl}listDevice${version}`);
+      let res = await axios.get(commonCfg.listDevice);
       if (res.data == null) {
         return
       }
@@ -303,7 +302,7 @@ export default {
     //获得传感器维护纪录列表
     // get sensor maintenance records
     async getSensorRecordList () {
-      let res = await axios.get(`${commonUrl}listDeviceRecord${version}`);
+      let res = await axios.get(commonCfg.listDeviceRecord);
 
       if (res.data == null) {
         return
@@ -342,7 +341,7 @@ export default {
     // edit sensor maintenance records , create record without id
     async editSensorRecord (param) {
       let res = await axios.post(
-        `${commonUrl}editDeviceRecord${version}`,
+        commonCfg.editDeviceRecord,
         param
       );
       try {

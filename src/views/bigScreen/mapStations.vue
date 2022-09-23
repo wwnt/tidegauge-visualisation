@@ -367,8 +367,7 @@ import mapCfg from '../../config/map'
 import axios from "axios";//基于Promise的HTTP客户端 Promise-based HTTP client
 import commonCfg from '../../config/common'
 let vm;
-let commonUrl = commonCfg.commonUrl
-let version = commonCfg.urlVersion
+
 let leafMap; // 地图实例 leaflet map 
 let customStationMap = {}//保存自己站的数据map Save your own station data map
 let carouselItemSize = 3;//每组carousel内item的数量 The number of items in each group of carousel 
@@ -598,7 +597,7 @@ export default {
     //获得gloss数据
     // get gloss data
     async getGlossDataList () {
-      let res = await axios.get(`${commonUrl}getGlossDataList${version}`)
+      let res = await axios.get(commonCfg.getGlossDataList)
       try {
         if (!res.data) {
           vm.glossData = [];
@@ -690,7 +689,7 @@ export default {
     // 加载站点数据
     // load ioc station data
     loadIOC () {
-      axios.get(`${commonUrl}seaHeightData${version}`).then(res => {
+      axios.get(commonCfg.seaHeightData).then(res => {
         this.iocStationList = res.data.map(v => {
           return {
             name: v.name,
@@ -712,7 +711,7 @@ export default {
     },
     async getIOCDataHistory (IOC_ID) {
       try {
-        let res = await axios.get(`${commonUrl}IOCHistory${version}?id=` + IOC_ID, { timeout: 3000 })
+        let res = await axios.get(`${commonCfg.IOCHistory}?id=` + IOC_ID, { timeout: 3000 })
         if (!res.data) {
           return []
         }
@@ -742,7 +741,7 @@ export default {
     //获得站列表
     // get station list
     async getAllStations () {
-      let res = await axios.get(`${commonUrl}listStation${version}`);
+      let res = await axios.get(commonCfg.listStation);
       try {
         if (!res.data) {
           vm.stationList = [];
@@ -759,7 +758,7 @@ export default {
     // get item list
     async getAllItems () {
       let param = {}
-      let res = await axios.get(`${commonUrl}listItem${version}`, param);
+      let res = await axios.get(commonCfg.listItem, param);
       try {
         if (!res.data) {
           vm.sensorItems = [];
@@ -804,7 +803,7 @@ export default {
       param.start = start + '';
       param.end = end + '';
       param.item_name = itemName;
-      let res = await axios.get(`${commonUrl}dataHistory${version}`, {
+      let res = await axios.get(commonCfg.dataHistory, {
         params: param
       });
       if (res.data == null) {
@@ -881,7 +880,7 @@ export default {
     //获得sonel列表
     //get sonel list
     async getSonelList(){
-      let res = await axios.get(`${commonUrl}getSonelDataList${version}`);
+      let res = await axios.get(commonCfg.getSonelDataList);
       //console.log(res.data)
       try {
         if (!res.data) {
@@ -967,7 +966,7 @@ export default {
     //获得psmsl列表
     //get psmsl list
     async getPsmslList(){
-      let res = await axios.get(`${commonUrl}getPsmslDataList${version}`);
+      let res = await axios.get(commonCfg.getPsmslDataList);
       //console.log(res.data)
       try {
         if (!res.data) {

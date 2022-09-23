@@ -1,6 +1,27 @@
+var commonUrl = 'https://test.navi-tech.net/api/tgm/'
+var wsUrl = 'wss://test.navi-tech.net/tmws/'
+
 module.exports = {
-  commonUrl: 'https://test.navi-tech.net/api/tgm/',//api路径 api path
-  urlVersion: '/1.0',//api版本 api version
-  webSocket:'wss://test.navi-tech.net/tmws/data',//websocket url
-  status:'wss://test.navi-tech.net/tmws/global'//global status url
+  commonUrl: commonUrl,//api路径 api path
+
+  webSocket: wsUrl + 'data',//websocket url
+  status: wsUrl + 'global',//global status url
+
+  listStation: commonUrl + 'listStation',
+  editStation: commonUrl + 'editStation',
+  listItem:  commonUrl +  'listItem',
+  delStation: commonUrl +  'delStation',
+  listPermission: commonUrl +  'listPermission',
+  seaHeightData: commonUrl +  'seaHeightData',
+  getSeaLevelList: commonUrl +  'getSeaLevelList',
+  getGlossDataList: commonUrl +  'getGlossDataList',
+  IOCHistory: commonUrl +  'IOCHistory',
+  dataHistory: commonUrl +  'dataHistory',
+  getSonelDataList: commonUrl +  'getSonelDataList',
+  getPsmslDataList: commonUrl +  'getPsmslDataList',
+  listDevice: commonUrl +  'listDevice',
+  listDeviceRecord: commonUrl +  'listDeviceRecord',
+  editDeviceRecord: commonUrl +  'editDeviceRecord'
+
+
 }
