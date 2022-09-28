@@ -227,7 +227,7 @@ import axios from "axios"; //基于Promise的HTTP客户端 Promise-based HTTP cl
 import qs from "qs"; //处理提交的表单数据 Handling submitted form data
 import commonCfg from "../config/common";
 import mapCfg from "../config/map";
-let webSocket = commonCfg.webSocket
+
 
 let vm;
 let wsConn = null;
@@ -297,6 +297,7 @@ export default {
       permissionDatas: {}, //权限数据列表 Permission data list
       permissionItems: [], // 普通用户权限下的数据列表  ordinary user item data permission
       role: parseInt(localStorage.role), //当前登录用户的权限 login user role
+      dataWsUrl: commonCfg.dataWs + localStorage.token
     };
   },
   props: ["wsConn"],
@@ -969,7 +970,7 @@ export default {
     //设置websocket连接 Set up websocket connection
     setWSConn () {
       // window.wsConn = new WebSocket(webSocket);
-      wsConn = new WebSocket(webSocket);
+      wsConn = new WebSocket(this.dataWsUrl);
       wsConn.onopen = this.handleWSOpen;
       wsConn.onclose = this.handleWSClose;
       wsConn.onerror = this.handleWSError;

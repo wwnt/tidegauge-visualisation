@@ -12,7 +12,7 @@ let commonUrl = commonCfg.commonUrl;
 axios.interceptors.request.use(
   (config) => {
     if (localStorage.token) {
-      if (config.url !== 'token/1.0' && config.url !== 'validate/1.0') {
+      if (config.url.indexOf('login') == -1) {
         config.headers.Authorization = `Bearer ${localStorage.token}`;
       }
     }
@@ -37,7 +37,7 @@ axios.interceptors.response.use(
           // 401 Clear the token information and jump to the login page
           //store.dispatch(USER_SIGNOUT)
           if (localStorage.token) {
-            document.cookie = "token=''; path=/"; //清除cookie里的token Clear the token in the cookie
+            //document.cookie = "token=''; path=/"; //清除cookie里的token Clear the token in the cookie
             localStorage.removeItem('token');
             localStorage.removeItem('refresh_token');
           }
@@ -134,17 +134,17 @@ export default {
   delete: function(url, params) {
     return apiAxios('DELETE', url, params);
   },
-  login: function(url, params) {
-    params = qs.stringify(params); //对象格式化为字符串 Object formatted as string
-    console.log(params);
-    return apiAxios('POST', url, params);
-  },
-  validate: function(url, params) {
-    params = qs.stringify(params);
-    return apiAxios('POST', url, params);
-  },
-  logout: function(url, params) {
-    params = qs.stringify(params);
-    return apiAxios('POST', url, params);
-  },
+  // login: function(url, params) {
+  //   params = qs.stringify(params); //对象格式化为字符串 Object formatted as string
+  //   console.log(params);
+  //   return apiAxios('POST', url, params);
+  // },
+  // validate: function(url, params) {
+  //   params = qs.stringify(params);
+  //   return apiAxios('POST', url, params);
+  // },
+  // logout: function(url, params) {
+  //   params = qs.stringify(params);
+  //   return apiAxios('POST', url, params);
+  // },
 };

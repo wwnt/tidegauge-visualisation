@@ -1,14 +1,14 @@
 //this is the api config file
-var commonUrl = 'https://test.navi-tech.net/api/tgm/'//this is the generic api url
-var wsUrl = 'wss://test.navi-tech.net/tmws/'//this is the generic websocket url
+var commonUrl = 'http://test.navi-tech.net/tm/'//this is the generic api url
+var wsUrl = 'ws://test.navi-tech.net/tmws/'//this is the generic websocket url
 //When modifying, you only need to modify the above two addresses corresponding to the server background address.
 
-module.exports = {
+const url = {
   commonUrl: commonUrl,//api路径 api path
 
-  webSocket: wsUrl + 'data',//websocket url
-  status: wsUrl + 'global',//global status url
-
+  dataWs: wsUrl + 'data?token=',//websocket url
+  statusWs: wsUrl + 'global?token=',//global status url
+ 
   listStation: commonUrl + 'listStation',
   editStation: commonUrl + 'editStation',
   listItem:  commonUrl +  'listItem',
@@ -23,7 +23,9 @@ module.exports = {
   getPsmslDataList: commonUrl +  'getPsmslDataList',
   listDevice: commonUrl +  'listDevice',
   listDeviceRecord: commonUrl +  'listDeviceRecord',
-  editDeviceRecord: commonUrl +  'editDeviceRecord'
-
+  editDeviceRecord: commonUrl +  'editDeviceRecord',
+  login: commonUrl + 'login',
+  logout: commonUrl + 'logout'
 
 }
+export default url

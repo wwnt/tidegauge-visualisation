@@ -53,7 +53,11 @@
   </v-app>
 </template>
 <script>
-import axiosTool from '../api/axios.js'
+//import axios from '../api/axios.js'
+import axios from "axios";
+import commonCfg from '../config/common'
+import qs from 'qs'
+
 export default {
   data () {
     return {
@@ -66,7 +70,7 @@ export default {
       // 登录表单
       // log form
       form: {
-        grant_type: 'password',
+        //grant_type: 'password',
         username: localStorage.username || '',
         password: ''
       }
@@ -85,21 +89,24 @@ export default {
   methods: {
     login () {
       if (this.$refs.form.validate()) {
-        axiosTool
-          .login('token', this.form)
+        axios.post(commonCfg.login, qs.stringify(this.form))
           //在使用另一个函数调用它时从promise中获取值
           //Get value from promise when calling it with another function
           .then(res => {
             if (res) {
-              document.cookie = 'token=' + res.access_token + '; path=/' //token放进cookie里 token in cookie
-              localStorage.token = res.access_token
-              localStorage.refresh_token = res.refresh_token
+              //document.cookie = 'token=' + res.access_token + '; path=/' //token放进cookie里 token in cookie
+              localStorage.setItem('token', res.data.access_token)
+              localStorage.setItem('refresh_token', res.data.refresh_token)
               localStorage.username = this.form.username
               this.$router.push('/stationList')
             } else {
-              this.text = '用户名或密码错误'
+              this.text = 'error'
               this.snackbar = true
             }
+          }).catch(error => {
+            this.text = 'error'
+            this.snackbar = true
+            console.log(error)
           })
       }
     },

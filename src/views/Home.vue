@@ -200,11 +200,13 @@
 </template>
 
 <script>
+import axios from 'axios';
 import axiosTool from '../api/axios.js';
 import commonCfg from '../config/common'
+import qs from 'qs'
 
 let vm = null
-let status = commonCfg.status
+
 export default {
   name: "Home",
   components: {
@@ -289,7 +291,8 @@ export default {
         username: '',
         live_camera: true
       },
-      connected: false // websocket 连接状态 Connection Status
+      connected: false, // websocket 连接状态 Connection Status
+      statusUrl: commonCfg.statusWs + localStorage.token
     };
   },
   async created () {
@@ -380,8 +383,16 @@ export default {
     },
 
     logoutDialog () {
-      localStorage.removeItem("token");
-      this.$router.push("/login");
+      axios.post(commonCfg.logout, qs.stringify({refresh_token: localStorage.refresh_token})).then(res => {
+        if(res.status == 204) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("refresh_token");
+          this.$router.push("/login");
+        }
+      }).catch(error => {
+        console.log(error)
+      })
+      
     },
     //跳转到指定页面
     // router to page
@@ -417,7 +428,7 @@ export default {
     //设置websocket连接
     // set websocket conn
     setWSConn () {
-      window.wsConn = new WebSocket(status);
+      window.wsConn = new WebSocket(this.statusUrl);
       this.wsConn = window.wsConn
       console.log(this.wsConn)
       // wsConn = window.wsConn;

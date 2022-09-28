@@ -141,43 +141,38 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限 Determine whether the route requires login permission
       //console.log(to)
       if (localStorage.token) {  // 判断当前的token是否存在 Determine whether the current token exists
-          axiosTool
-              .validate("validate", { token: localStorage.token })
-              .then(res => {
-                  if (res.active == true) {
-                      //get the user information and store the role
-                      axiosTool.get('userInfo')
-                          .then(res => {
-                              //console.log(res)
-                              localStorage.email = res.email
-                              localStorage.username = res.username
-                              localStorage.role = res.role
-                              localStorage.live_camera=res.live_camera
-                              let role;
-                              if (res.role == 2) {
-                                  role = 'SA';//"SuperAdmin";
-                              }
-                              else if (res.role == 1) {
-                                  role = 'GA';//"GroupAdmin"; 
-                                  // vm.$root.groupIdForLoginUser = res.groupId;//当前组管理员的组id The group id of the current group administrator
-                              } else {
-                                  role = 'OU';//"OrdinaryUser"                                  
-                              }
-                              vm.$root.role = role;
-                              if (to.meta.roles.indexOf(role) != -1) {//角色存在于有权限的角色列表里 The role exists in the list of privileged roles
-                                  next();
-                              } else {
-                                  next(false);//拦截，使其跳回原页面 Block it and make it jump back to the original page
-                              }
-                              console.log(vm.$root.role)
-                          })
-                  } else {
-                      next({
-                          path: '/login',
-                          query: { redirect: to.fullPath }
-                      })
-                  }
-              });
+        //get the user information and store the role
+        axiosTool.get('userInfo')
+          .then(res => {
+          //console.log(res)
+            localStorage.email = res.email
+            localStorage.username = res.username
+            localStorage.role = res.role
+            localStorage.live_camera=res.live_camera
+            let role;
+            if (res.role == 2) {
+              role = 'SA';//"SuperAdmin";
+            }
+            else if (res.role == 1) {
+              role = 'GA';//"GroupAdmin"; 
+              // vm.$root.groupIdForLoginUser = res.groupId;//当前组管理员的组id The group id of the current group administrator
+            } else {
+              role = 'OU';//"OrdinaryUser"                                  
+            }
+            vm.$root.role = role;
+            if (to.meta.roles.indexOf(role) != -1) {//角色存在于有权限的角色列表里 The role exists in the list of privileged roles
+              next();
+            } else {
+              next(false);//拦截，使其跳回原页面 Block it and make it jump back to the original page
+            }
+            console.log(vm.$root.role)
+        }).catch(error => {
+            console.log(error)
+            next({
+              path: '/login',
+              query: { redirect: to.fullPath }
+            })
+        })          
       }
       else {
           next({
