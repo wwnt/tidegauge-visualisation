@@ -59,9 +59,8 @@
             <v-icon>mdi-translate</v-icon>
           </v-btn>
         </template>
-        <v-list>
-          <v-list-item @click="changeLocale('zhHans')">中文</v-list-item>
-          <v-list-item @click="changeLocale('en')">English</v-list-item>
+        <v-list v-for="(value,key,i) in langs" :key="i">
+          <v-list-item @click="changeLocale(key)">{{value}}</v-list-item>
         </v-list>
       </v-menu>
 
@@ -292,7 +291,8 @@ export default {
         live_camera: true
       },
       connected: false, // websocket 连接状态 Connection Status
-      statusUrl: commonCfg.statusWs + localStorage.token
+      statusUrl: commonCfg.statusWs + localStorage.token,
+      langs: commonCfg.langs
     };
   },
   async created () {

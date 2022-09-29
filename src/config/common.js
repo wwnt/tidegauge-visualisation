@@ -1,13 +1,14 @@
-//this is the api config file
-var commonUrl = 'http://test.navi-tech.net/tm/'//this is the generic api url
-var wsUrl = 'ws://test.navi-tech.net/tmws/'//this is the generic websocket url
-//When modifying, you only need to modify the above two addresses corresponding to the server background address.
+//this is the config file
+var commonUrl = 'http://localhost/tide/api/'//this is the generic api url
 
-const url = {
+//When modifying, you only need to modify the above an address corresponding to the server background address.
+
+const config = {
+  //api url
   commonUrl: commonUrl,//api路径 api path
 
-  dataWs: wsUrl + 'data?token=',//websocket url
-  statusWs: wsUrl + 'global?token=',//global status url
+  dataWs: commonUrl.replace('http','ws') + 'ws/data?token=',//real-time data url
+  statusWs: commonUrl.replace('http','ws') + 'ws/global?token=',//global status url
  
   listStation: commonUrl + 'listStation',
   editStation: commonUrl + 'editStation',
@@ -25,7 +26,17 @@ const url = {
   listDeviceRecord: commonUrl +  'listDeviceRecord',
   editDeviceRecord: commonUrl +  'editDeviceRecord',
   login: commonUrl + 'login',
-  logout: commonUrl + 'logout'
+  logout: commonUrl + 'logout',
+
+  //language pack
+  langs: {
+    'zhHans': '中文',
+    'en': 'English'
+  },
+  //Large screen display 
+  largeScreen: {
+    logoUrl: require('../assets/sealogo.png')// logo url
+  }
 
 }
-export default url
+export default config

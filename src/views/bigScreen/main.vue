@@ -7,7 +7,7 @@
         <v-row>
           <v-col cols="8">
             <div style="display:flex;align-items:center">
-              <img src="../../assets/sealogo.png" height="100" style="position:absolute;top:2px;left:1px" />
+              <img :src="logoUrl" height="100" style="position:absolute;top:2px;left:1px" />
               <span class="big-screen-title">{{ $vuetify.lang.t("$vuetify.systemName") }}</span>
             </div>
           </v-col>
@@ -137,6 +137,7 @@
 </template>
 <script>
 import draggable from 'vuedraggable'
+import commonCfg from '../../config/common'
 let vm;
 let getCurrentTimeInterval = null//获得当前时间的定时 Get the timing of the current time 
 let layerPlayInterval = null//layer循环播放定时器 Loop timer 
@@ -166,6 +167,7 @@ export default {
       snackbarColor: "error",
       snackbarText: "",
       //showLoading: true,//显示loading
+      logoUrl: commonCfg.largeScreen.logoUrl
 
     }
   },
