@@ -300,7 +300,8 @@ export default {
       title: '覆盖物',
       data: '站点展示',
       threedHeight: '立体海洋高度',
-      mapSeaHeight: '地图海洋高度'
+      mapSeaHeight: '地图海洋高度',
+      seaHeightPhoto: '海平面图示',
     },
     settingDialog: {
       title: '播放设置',

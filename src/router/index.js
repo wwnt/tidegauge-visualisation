@@ -7,6 +7,7 @@ import registered from '../views/registered';
 import bigScreenMapStations from '../views/bigScreen/mapStations.vue'
 import globeSeaHeight from '../views/bigScreen/globeSeaHeight.vue'
 import mapSeaHeight from '../views/bigScreen/mapSeaHeight.vue'
+import seaHeightPhoto from '../views/bigScreen/seaHeightPhoto.vue'
 Vue.use(VueRouter);
 
 const routes = [
@@ -116,7 +117,8 @@ const routes = [
         components: {
           mapStations: bigScreenMapStations,
           globeSeaHeight: globeSeaHeight,
-          mapSeaHeight: mapSeaHeight
+          mapSeaHeight: mapSeaHeight,
+          seaHeightPhoto : seaHeightPhoto
         }
       }
     ]

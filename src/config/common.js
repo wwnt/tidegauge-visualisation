@@ -1,5 +1,5 @@
 //this is the config file
-var commonUrl = 'http://localhost/tide/api/'//this is the generic api url
+var commonUrl = 'https://test.navi-tech.net/tm/'//this is the generic api url
 
 //When modifying, you only need to modify the above an address corresponding to the server background address.
 
@@ -7,8 +7,8 @@ const config = {
   //api url
   commonUrl: commonUrl,//api路径 api path
 
-  dataWs: commonUrl.replace('http','ws') + 'ws/data?token=',//real-time data url
-  statusWs: commonUrl.replace('http','ws') + 'ws/global?token=',//global status url
+  dataWs: commonUrl.replace('https','wss') + 'ws/data?token=',//real-time data url
+  statusWs: commonUrl.replace('https','wss') + 'ws/global?token=',//global status url
  
   listStation: commonUrl + 'listStation',
   editStation: commonUrl + 'editStation',
@@ -36,7 +36,9 @@ const config = {
   //Large screen display 
   largeScreen: {
     logoUrl: require('../assets/sealogo.png')// logo url
-  }
+  },
+
+  seaHeightPhoto: 'https://test.navi-tech.net/sea_height_photo/'//海平面图片所在的文件夹 The folder where the sea level images are located
 
 }
 export default config

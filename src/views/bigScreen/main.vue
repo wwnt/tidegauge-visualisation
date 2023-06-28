@@ -76,6 +76,8 @@
             v-show="overlayerGroups.filter(item => item.icon == 'mdi-earth')[0].activeClass"></router-view>
           <router-view name="mapSeaHeight" ref="map-sea-height"
             v-show="overlayerGroups.filter(item => item.icon == 'mdi-waveform')[0].activeClass"></router-view>
+            <router-view name="seaHeightPhoto" ref="sea-height-photo"
+            v-if="overlayerGroups.filter(item => item.icon == 'mdi-image')[0].activeClass"></router-view>
         </v-card>
       </v-main>
 
@@ -158,6 +160,7 @@ export default {
         { icon: 'mdi-chart-line', text: '', activeClass: true, autoPlayTime: 40, order: 1, switch: true },
         { icon: 'mdi-earth', text: '', activeClass: false, autoPlayTime: 30, order: 2, switch: true },
         { icon: 'mdi-waveform', text: '', activeClass: false, autoPlayTime: 30, order: 3, switch: true },
+        { icon: 'mdi-image', text: '', activeClass: false, autoPlayTime: 30, order: 4, switch: true },
       ],
       showPlaySettingDialog: false,//显示播放设置对话框 display the playback settings dialog
       //cancelPlaySettingAble: false,//是否禁用播放设置的取消按钮 whether to disable the cancel button of the playback setting
@@ -220,7 +223,7 @@ export default {
     //overlayer文本名称构造
     //overlay text name construction
     constructOverlayerTexts () {
-      let overlayerTexts = ['data', 'threedHeight', 'mapSeaHeight'];
+      let overlayerTexts = ['data', 'threedHeight', 'mapSeaHeight', 'seaHeightPhoto'];
       for (let i = 0; i < overlayerTexts.length; i++) {
         this.overlayerGroups[i].text = vm.$vuetify.lang.t("$vuetify.showData.overlayer." + overlayerTexts[i])
       }
@@ -567,5 +570,4 @@ function zeroPadding (num, digit) {
 .introjs-tooltipbuttons .introjs-button {
   border-radius: 0.4em;
 }
-
 </style>

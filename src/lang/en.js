@@ -301,7 +301,8 @@ export default {
       title: 'overlayers',
       data: 'Station Display',
       threedHeight: '3d Ocean Height',
-      mapSeaHeight: 'Map Ocean Height'
+      mapSeaHeight: 'Map Ocean Height',
+      seaHeightPhoto: 'Sea Level Picture Display',
     },
     settingDialog: {
       title: 'Playing Setting',
