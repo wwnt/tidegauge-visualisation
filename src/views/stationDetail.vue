@@ -504,13 +504,17 @@ export default {
           icon: perIcon,
         }).addTo(leafMap);
 
-        let delBtnName = vm.$vuetify.lang.t("$vuetify.stationDetail.btn.del");
-        let popupContentPre = `<button style="color:blue" id="${spot.id}">`;
-        let popupContentAppand = "</button>";
-        marker.bindPopup(
-          `${popupContentPre}${delBtnName}${popupContentAppand}`,
-          { offset: [2, -6] }
-        );
+        let delBtnName,popupContentPre,popupContentAppand;
+        if (vm.role !== 0) {// 普通用户不能删除，管理员才能删除 Administrators have permission to delete
+          delBtnName = vm.$vuetify.lang.t("$vuetify.stationDetail.btn.del");
+          popupContentPre = `<button style="color:blue" id="${spot.id}">`;
+          popupContentAppand = "</button>";
+          marker.bindPopup(
+            `${popupContentPre}${delBtnName}${popupContentAppand}`,
+            { offset: [2, -6] }
+          );
+        }
+        
         markerMap.set(spot.id, marker)
         //点击marker时触发
         // click marker 
@@ -518,11 +522,13 @@ export default {
           console.log(vm.showStationId == spot.id)
           //给每个marker的id绑定一个删除事件
           // addeventlistener with marker to delete
-          document
-            .getElementById(spot.id + "")
-            .addEventListener("click", function () {
-              vm.del(spot.id, marker);
+          if (vm.role !== 0) {// 普通用户不能删除，管理员才能删除 Administrators have permission to delete
+            document
+              .getElementById(spot.id + "")
+              .addEventListener("click", function () {
+                vm.del(spot.id, marker);
             });
+          }
           if (vm.showStationId == spot.id) {
             return;
           }
@@ -532,17 +538,20 @@ export default {
           vm.ip = spot.ip_addr; //显示ip show ip
           //语言切换后 改变 删除 按钮名字的中英文
           //After the language switch, change the delete button name in Chinese and English
-          if (
-            vm.$vuetify.lang.t("$vuetify.stationDetail.btn.del") !== delBtnName
-          ) {
-            delBtnName = vm.$vuetify.lang.t("$vuetify.stationDetail.btn.del");
-            marker._popup.setContent(
-              `${popupContentPre}${delBtnName}${popupContentAppand}`
-            );
+          if(vm.role !== 0) {// 普通用户不能删除，管理员才能删除 Administrators have permission to delete
+            if (
+              vm.$vuetify.lang.t("$vuetify.stationDetail.btn.del") !== delBtnName
+            ) {
+              delBtnName = vm.$vuetify.lang.t("$vuetify.stationDetail.btn.del");
+              marker._popup.setContent(
+                `${popupContentPre}${delBtnName}${popupContentAppand}`
+              );
+            }
           }
+          
           //打开popup窗口
           // open popup
-          if (vm.role === 0) marker.closePopup(); //普通用户的话就关闭popup  close popup when is ordinary user 
+          //if (vm.role === 0) marker.closePopup(); //普通用户的话就关闭popup  close popup when is ordinary user 
           console.log(spot.id)
           wsConn.send(null)
           vm.componentKey += 1; //改变组件id 可以销毁旧组件并创建一个新组件 Change the component id to destroy the old component and create a new one
