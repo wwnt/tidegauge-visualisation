@@ -38,7 +38,7 @@ const config = {
     logoUrl: require('../assets/sealogo.png')// logo url
   },
 
-  seaHeightPhoto: 'https://test.navi-tech.net/sea_height_photo/'//海平面图片所在的文件夹 The folder where the sea level images are located
-
+  seaHeightPhoto: 'https://test.navi-tech.net/sea_height_photo/',//海平面图片所在的文件夹 The folder where the sea level images are located
+  reportUrl: 'http://192.168.5.4:8501'//报告路径 report url
 }
 export default config

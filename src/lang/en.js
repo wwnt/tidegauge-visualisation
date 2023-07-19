@@ -352,6 +352,12 @@ export default {
       workBad: "The station doesn't work",
       noExits: 'he station no longer exists',
       fromCountry: 'The station is not managed by France'
+    },
+    photo: {
+      seaLevel: 'Global sea level',
+      playBtn: 'Play',
+      pauseBtn: 'Pause',
+      viewReport: 'View report'
     }
   },
   video:{

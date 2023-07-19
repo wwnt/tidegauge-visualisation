@@ -5,6 +5,7 @@ import Vuetify from 'vuetify/lib';
 import zhHans from '../lang/zh-Hans'; //中文 Chinese
 import en from '../lang/en'; //英语 English
 import treeSelect from 'ant-design-vue/lib/tree-select'; // 加载 JS load js
+import '@mdi/font/css/materialdesignicons.css'
 Vue.use(Vuetify);
 Vue.use(treeSelect);
 // Vue.component('my-component', {
@@ -18,5 +19,8 @@ export default new Vuetify({
   lang: {
     locales: { zhHans, en },
     current: localStorage.lang == null ? 'zhHans' : localStorage.lang,
+  },
+  icons: {
+    iconfont: 'mdi'
   },
 });

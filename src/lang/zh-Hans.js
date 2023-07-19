@@ -351,6 +351,12 @@ export default {
       workBad: '该站不工作',
       noExits: '该站不存在',
       fromCountry: '该站不由法国管理'
+    },
+    photo: {
+      seaLevel: '全球海平面',
+      playBtn: '播放',
+      pauseBtn: '暂停',
+      viewReport: '查看报告'
     }
   },
   video:{
