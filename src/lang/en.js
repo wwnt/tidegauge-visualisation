@@ -215,7 +215,8 @@ export default {
     editConfig:'Edit Config',
     addConfig:'Add Config',
     del:'Delete Data Source',
-    confirmDeluser:'Please confirm to delete this Data Source!'
+    confirmDeluser:'Please confirm to delete this Data Source!',
+    upstreamUrl: 'upstream url'
   },
   userconfig: {
     tabs: {
@@ -254,7 +255,8 @@ export default {
     confirmPasswordRules:"Those passwords didn't match.",
     applicationFailed:'Application failed',
     applicationSuccess:'Application success! The result will be notified to you by email',
-   
+    cameraPermissions: 'Camera permissions',
+    snapshotPermissions: 'Real-time snapshot permissions'
 
   },
   accountRequest:{

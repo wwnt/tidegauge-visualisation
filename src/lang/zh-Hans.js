@@ -215,7 +215,8 @@ export default {
     editConfig:'修改配置',
     addConfig:'新建配置',
     del:'删除数据源',
-    confirmDeluser:'请确认删除此数据源！'
+    confirmDeluser:'请确认删除此数据源！',
+    upstreamUrl: '上游路径'
   },
   userconfig: {
     tabs: {
@@ -254,7 +255,8 @@ export default {
     confirmPasswordRules:'两次密码不一致',
     applicationFailed:'申请失败',
     applicationSuccess:'申请成功,结果将通过邮箱通知您',
-  
+    cameraPermissions: '摄像头权限',
+    snapshotPermissions: '实时快照权限'
   },
   accountRequest:{
     agree:'同意',

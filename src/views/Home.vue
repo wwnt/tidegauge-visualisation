@@ -316,18 +316,18 @@ export default {
       return [
         {
           text: this.$vuetify.lang.t('$vuetify.message.itemName'),
-          sortable: false,
+          sortable: true,
           value: 'itemName',
         },
         {
           text: this.$vuetify.lang.t('$vuetify.message.status'),
-          sortable: false,
+          sortable: true,
           value: 'status',
         },
         {
           text: this.$vuetify.lang.t('$vuetify.message.time'),
           align: 'start',
-          sortable: false,
+          sortable: true,
           value: 'time',
         },
       ]
@@ -408,20 +408,20 @@ export default {
     },
 
     getStatus (status) {
-      let str = ""
+      //let str = ""
       let color = ""
       if (status == 'Disconnected') {
-        str = "断开连接"
+        //str = "断开连接"
         color = "red"
       } else if (status == "Abnormal") {
-        str = "连接异常"
+        //str = "连接异常"
         color = "red"
       } else {
-        str = "已连接"
+        //str = "已连接"
         color = "green"
       }
       return {
-        status: str,
+        status: status,
         color: color
       }
     },

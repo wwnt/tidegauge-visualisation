@@ -132,7 +132,7 @@
                     tree-default-expand-all></tree-select>
                 </v-col>
                 <v-col cols="12">
-                  <div style="margin-bottom:8px">摄像头权限</div>
+                  <div style="margin-bottom:8px">{{$vuetify.lang.t('$vuetify.userconfig.cameraPermissions')}}</div>
                   <tree-select style="width: 100%" v-model="form.cameraPermisson" :tree-data="cameraItems"
                     :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
                     :disabled="form.group==$vuetify.lang.t('$vuetify.userconfig.superAdmin')||form.group==$vuetify.lang.t('$vuetify.userconfig.admin')"
@@ -140,7 +140,7 @@
                     tree-default-expand-all></tree-select>
                 </v-col>
                 <v-col cols="12">
-                  <v-switch v-model="form.realTime" label="实时快照权限"
+                  <v-switch v-model="form.realTime" :label="$vuetify.lang.t('$vuetify.userconfig.snapshotPermissions')"
                     :disabled="form.group==$vuetify.lang.t('$vuetify.userconfig.superAdmin')||form.group==$vuetify.lang.t('$vuetify.userconfig.admin')">
                   </v-switch>
                 </v-col>
