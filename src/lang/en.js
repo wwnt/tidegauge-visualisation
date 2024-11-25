@@ -4,12 +4,13 @@ import en from 'vuetify/es5/locale/en';
 
 export default {
   ...en, //继承 Vuetify 的翻译 Inherit Vuetify's translation
+
+  //添加自己的翻译 Add your own translation
   login:{
     authorizationTitle:'We value your privacy',
-    authorizationInfo:'By clicking “Accept All Cookies”, you agree to the storing of cookies on your device to verify user identity and obtain real-time data。',
+    authorizationInfo:'By clicking “Accept All Cookies”, you agree to the storing of cookies on your device to verify user identity and obtain real-time data.',
     agree:'Accept All Cookies'
   },
-  //添加自己的翻译 Add your own translation
   systemName: 'Tidegauge Management System',
   datetimePicker: {
     date: 'Date',
@@ -352,7 +353,7 @@ export default {
       workBest: 'The station works properly : data are available',
       workBetter: 'Problem(s) detected but data are available',
       workBad: "The station doesn't work",
-      noExits: 'he station no longer exists',
+      noExits: 'The station no longer exists',
       fromCountry: 'The station is not managed by France'
     },
     photo: {
