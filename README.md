@@ -15,7 +15,6 @@ Import the Vuetify Portuguese language pack at the head of the current js file, 
 import pt from 'vuetify/es5/locale/pt;
 export default {
   ..pt,
-
 }
 For the specific format, please refer to en.js and translate the remaining English in the quotation marks into Portuguese, such as:
 login: {
