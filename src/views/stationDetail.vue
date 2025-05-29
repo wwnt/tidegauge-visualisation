@@ -172,6 +172,10 @@
               </v-chip>
             </template>
           </v-combobox>
+           <v-radio-group row v-model="chartType" class="mx-auto mt-0" style="width: 20vw" @change="changeChartType">
+            <v-radio :label="$vuetify.lang.t('$vuetify.historyData.form.line')" value="line"></v-radio>
+            <v-radio :label="$vuetify.lang.t('$vuetify.historyData.form.waterfall')" value="waterfull"></v-radio>
+          </v-radio-group>
           <!-- 数据类型及所属传感器名称 -->
           <!--  Data type and sensor name -->
           <!-- <div v-for="item in role === 0 ? permissionItems : sensorItems" :key="item.name"> -->
@@ -262,7 +266,7 @@ let offlineIcon = L.icon({
   iconSize: [25, 27],
 });
 let statusWsConn;
-
+let currentStationId;
 export default {
   data () {
     return {
@@ -297,7 +301,8 @@ export default {
       permissionDatas: {}, //权限数据列表 Permission data list
       permissionItems: [], // 普通用户权限下的数据列表  ordinary user item data permission
       role: parseInt(localStorage.role), //当前登录用户的权限 login user role
-      dataWsUrl: commonCfg.dataWs + localStorage.token
+      dataWsUrl: commonCfg.dataWs + localStorage.token,
+      chartType: 'line',
     };
   },
   props: ["wsConn"],
@@ -352,6 +357,47 @@ export default {
         }
       ).addTo(leafMap);
     },
+    changeChartType() {
+      this.componentKey += 1
+      this.getItemNameList(currentStationId)
+    },
+    // 获取图表配置
+    // get settings of chart
+    normalLayout (name, unit) {
+      let layout = {
+        title: name,
+        yaxis: {
+          title: {
+            text: unit,
+          },
+          fixedrange: true,
+        },
+      };
+      return layout;
+    },
+    // 折线数据配置
+    // polyline chart setting
+    normalData (id) {
+      let data = {
+        name: id,
+        x: [],
+        y: [],
+        type: 'scatter',
+        mode: 'lines+markers',
+        //turboThreshold: 0,
+      };
+      return [data];
+    },
+    // 图表初始化
+    // init chart
+    initLineChart (unit, id) {
+      Plotly.react(
+        id,
+        this.normalData(id),
+        this.normalLayout(id, unit),
+        plotConfig
+      );
+    },
     //初始化plotly图表
     //Initialize plotly chart
     initChart (unit, id, xData, yData) {
@@ -368,7 +414,7 @@ export default {
         },
       };
       //console.log(id)
-      return Plotly.newPlot(
+      return Plotly.react(
         id,
         [
           {
@@ -860,11 +906,9 @@ export default {
         vm.permissionDatas = {};
       }
     },
-    //给websocket发送数据列表以获得相应数据 Send a list of data to websocket to get the corresponding data
-    async sendItemsToWS (stationId) {
-      console.log(stationId)
+    async getItemNameList(stationId) {
       vm.itemNameList = [];
-      vm.selectedItemNames = [];
+      //vm.selectedItemNames = [];
       await vm.getAllItems();
       //当前登录用户为普通用户
       // if login user is ordinary user
@@ -900,18 +944,24 @@ export default {
       }
       //初始化图表
       // init chart
-
-
       for (let name of vm.itemNameList) {
-        //console.log( name)
-        vm.initChart(vm.getUnitByItemName(name), name, [], []);
+        if(this.chartType == 'line') {
+          vm.initLineChart(vm.getUnitByItemName(name), name)
+        }else {
+          vm.initChart(vm.getUnitByItemName(name), name, [], []);
+        }  
       }
+
+    },
+    //给websocket发送数据列表以获得相应数据 Send a list of data to websocket to get the corresponding data
+    async sendItemsToWS (stationId) {
+      currentStationId = stationId
+      await this.getItemNameList(stationId);
+
+      if(vm.itemNameList.length <= 0) return
       //send message to ws
-      console.log(vm.itemNameList)
-      console.log(stationId)
       let param = {};
       param[stationId] = vm.itemNameList
-
       console.log(param)
       vm.param = param
       wsConn.send(JSON.stringify(param));
@@ -1025,24 +1075,35 @@ export default {
     // handle data 
     handleWSMessage (evt) {
       let data = JSON.parse(evt.data);
-
       var param = data.item_name;
-      if (param in vm.showMap) {
+      if(this.chartType == 'line') {
         Plotly.extendTraces(
           param,
           {
             x: [[new Date(data.msec)]],
-            y: [[data.val - vm.showMap[param]]],
+            y: [[data.val]],
           },
           [0],
           30
         );
-        vm.$set(vm.showMap, param, data.val)
-        // vm.showMap[param] = data.value;
-      } else {
-        vm.$set(vm.showMap, param, data.val)
-        // vm.showMap[param] = data.value;
-      }
+      }else{
+        if (param in vm.showMap) {
+          Plotly.extendTraces(
+            param,
+            {
+              x: [[new Date(data.msec)]],
+              y: [[data.val - vm.showMap[param]]],
+            },
+            [0],
+            30
+          );
+          vm.$set(vm.showMap, param, data.val)
+          // vm.showMap[param] = data.value;
+        } else {
+          vm.$set(vm.showMap, param, data.val)
+          // vm.showMap[param] = data.value;
+        }
+      } 
     },
     //根据数据类型获得单位
     // get unit by data typr
