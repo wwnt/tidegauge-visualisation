@@ -200,7 +200,7 @@
         </v-card-title>
         <v-card-subtitle>
           <div class="white--text">{{station.location.name}}</div>
-          <div class="white--text">{{station.partner.name}}</div>
+          <div class="white--text">{{station.partner ? station.partner.name : ''}}</div>
         </v-card-subtitle>
       </v-card>
     </div>
@@ -806,7 +806,7 @@ export default {
       let res = await axios.get(commonCfg.dataHistory, {
         params: param
       });
-      if (res.data == null) {
+      if (res.data == null || !res.data) {
         return []
       }
       let data = res.data.map(function (v) {
