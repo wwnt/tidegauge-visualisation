@@ -342,7 +342,8 @@ export default {
         var type = sernor[0].children.filter(v => v.name == item.device_name)
         type[0].children.push({
           text: item.name,
-          name: this.$vuetify.lang.t('$vuetify.historyData.dataType.' + item.type),
+          //name: this.$vuetify.lang.t('$vuetify.historyData.dataType.' + item.type),
+          name: item.name
         })
       }
       return result
@@ -385,7 +386,8 @@ export default {
         type[0].children.push({
           value: type[0].value + '-' + type[0].children.length,
           name: item.name,
-          title: this.$vuetify.lang.t('$vuetify.historyData.dataType.' + item.type),
+          //title: this.$vuetify.lang.t('$vuetify.historyData.dataType.' + item.type),
+          title: item.name
         })
       }
     },
@@ -495,7 +497,8 @@ export default {
               }
               console.log(sernsorData)
               treeData.children.filter(v => v.name == sernsorData[0].device_name)[0].children.push({
-                name: this.$vuetify.lang.t('$vuetify.historyData.dataType.' + sernsorData[0].type),
+                //name: this.$vuetify.lang.t('$vuetify.historyData.dataType.' + sernsorData[0].type),
+                name: sernsorData[0].name
               })
             }
             showPermissionData.push(treeData)
@@ -542,6 +545,7 @@ export default {
       let res = await axiosTool.get('listCameraStatusPermission', param)
       for (var item in res) {
         var camera = this.cameraItems.filter(v => v.id == item)
+        if(camera.length <= 0) continue
         for (var cameraName of res[item]) {
           for (var el of camera[0].children) {
             if (el.title == cameraName) {
