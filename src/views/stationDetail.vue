@@ -16,7 +16,7 @@
     <!-- 站点数据展示板 -->
     <!-- display station data  -->
     <div class="pa-3" style="position: absolute; top: 1%; right: 1%">
-      <v-card class="px-3 py-4 overflow-y-auto" style="max-width: 40vw; max-height: 83vh">
+      <v-card class="px-3 py-4 overflow-y-auto" :max-width="$vuetify.breakpoint.xsOnly ? '95vw' : '40vw'" style="max-height: 83vh">
         <!-- 站点信息表单 -->
         <!-- station information form -->
         <v-form ref="form">
@@ -47,7 +47,7 @@
               <v-text-field dense :label="$vuetify.lang.t('$vuetify.stationDetail.form.latlng')" v-model="form.latlng"
                 :rules="
                   rule($vuetify.lang.t('$vuetify.stationDetail.form.latlng'))
-                " :readonly="editIndex !== -1">
+                " :readonly="role === 0">
                 <template v-slot:prepend>
                   <v-tooltip left>
                     <template v-slot:activator="{ on }">
@@ -159,7 +159,7 @@
         <!-- data chart -->
         <div v-show="editIndex !== -1" :key="componentKey">
           <v-divider class="mb-4 mt-1" light></v-divider>
-          <v-combobox style="width: 20vw" class="mx-auto" :items="itemNameList" hide-selected
+          <v-combobox :style="{'width': $vuetify.breakpoint.smAndDown ? '95vw' : ($vuetify.breakpoint.mdOnly ? '50vw' : '20vw')}" class="mx-auto" :items="itemNameList" hide-selected
             :menu-props="showMenuProps" @click="showMenuProps = {}" dense chips clearable :label="
               $vuetify.lang.t(
                 '$vuetify.stationDetail.showItemData.comboboxLabel'
@@ -172,7 +172,7 @@
               </v-chip>
             </template>
           </v-combobox>
-           <v-radio-group row v-model="chartType" class="mx-auto mt-0" style="width: 20vw" @change="changeChartType">
+           <v-radio-group row v-model="chartType" class="mx-auto mt-0" :style="{'width': $vuetify.breakpoint.smAndDown ? '95vw' : ($vuetify.breakpoint.mdOnly ? '50vw' : '20vw')}" @change="changeChartType">
             <v-radio :label="$vuetify.lang.t('$vuetify.historyData.form.line')" value="line"></v-radio>
             <v-radio :label="$vuetify.lang.t('$vuetify.historyData.form.waterfall')" value="waterfull"></v-radio>
           </v-radio-group>
@@ -184,7 +184,7 @@
             <!-- Only display the chart in the selection list -->
             <v-row v-show="
                 selectedItemNames.filter((name) => name == item.name).length > 0
-              " style="width:20vw">
+              " :style="{'width': $vuetify.breakpoint.smAndDown ? '95vw' : ($vuetify.breakpoint.mdOnly ? '40vw' : '20vw')}">
               <v-col cols="12">
                 <v-tooltip left>
                   <template v-slot:activator="{ on }">
@@ -201,7 +201,7 @@
               <!-- 图表div -->
               <!-- chart div -->
               <v-col cols="12">
-                <div :id="item.name" name="1234" style="width:24vw"></div>
+                <div :id="item.name" name="1234" :style="{'width': $vuetify.breakpoint.smAndDown ? '95vw' : ($vuetify.breakpoint.mdOnly ? '50vw' : '20vw')}"></div>
                 <!-- <div v-show="
                     JSON.stringify(showMap) == '{}' || !item.name in showMap
                   " class="font-weight-bold text-body-1 pa-3">
@@ -600,6 +600,7 @@ export default {
           //if (vm.role === 0) marker.closePopup(); //普通用户的话就关闭popup  close popup when is ordinary user 
           console.log(spot.id)
           wsConn.send(null)
+          vm.selectedItemNames = []
           vm.componentKey += 1; //改变组件id 可以销毁旧组件并创建一个新组件 Change the component id to destroy the old component and create a new one
 
           vm.showMap = {};
@@ -918,8 +919,10 @@ export default {
         // vm.permissionItems = vm.permissionDatas
         for (let key in vm.permissionDatas) {
           for (let item_name of vm.permissionDatas[key]) {
-            let item = vm.sensorItems.filter(v => v.name == item_name)[0]
-            items.push(item)
+            let item = vm.sensorItems.filter(v => v.name == item_name)
+            if(item.length > 0) {
+              items.push(item[0])
+            }     
           }
           if (stationId === key) {
             vm.itemNameList = vm.permissionDatas[key];
@@ -927,7 +930,6 @@ export default {
           }
         }
         vm.$set(vm, 'sensorItems', items);
-
       } else {
         //当前登录用户为管理员
         // if login user is admin
