@@ -982,50 +982,27 @@ export default {
     // get device status
     handleStatusWSMessage (evt) {
       let data = JSON.parse(evt.data);
-
       console.log(data)
       if (data.type == 'UpdateItemStatus') {
-        for (let i = 0; i < vm.sensorItems.length; i++) {
-          if (vm.sensorItems[i].name != data.body.item_name) {
-            continue
-          }
-          if (data.body.status == 'Normal') {
-            vm.sensorItems[i].color = 'blue'
-            vm.sensorItems[i].text = vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.online")
-            vm.$emit("tips", data.body.item_name + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.online"), "green")
-          } else if (data.body.status == 'Abnormal') {
-            vm.sensorItems[i].color = 'yellow lighten-1'
-            vm.sensorItems[i].text = vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.noData")
-            vm.$emit("tips", data.body.item_name + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.noData"), "red")
-          } else {
-            vm.sensorItems[i].color = 'red lighten-2'
-            vm.sensorItems[i].text = vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.offline")
-            vm.$emit("tips", data.body.item_name + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.offline"), "red")
-          }
-          vm.$set(vm.sensorItems, i, vm.sensorItems[i])
-        }
+        let index = vm.sensorItems.findIndex(sensor => sensor.station_id == data.body.station_id && sensor.name == data.body.item_name)
+        if(index < 0) return
+        vm.sensorItems[index].status == data.body.status
+        if (data.body.status == 'Normal') {
+          vm.sensorItems[index].color = 'blue'
+          vm.sensorItems[index].text = vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.normal")
+        } else { // Abnormal
+          vm.sensorItems[index].color = 'yellow lighten-1'
+          vm.sensorItems[index].text = vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.abnormal") 
+        }  
+        vm.$set(vm.sensorItems, index, vm.sensorItems[index])
       } else {
         let markerIcon
         if (data.body.status == 'Normal') {
           markerIcon = icon
-          vm.$emit("tips", data.body.identifier + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.online"), "green")
         } else {
-          markerIcon = offlineIcon
-          vm.$emit("tips", data.body.identifier + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.offline"), "red")
-          // for (let i = 0; i < vm.sensorItems.length; i++) {
-          //   if (vm.sensorItems[i].station_id != data.body.station_id) {
-          //     continue
-          //   }
-          //   if (data.body.status == 'Disconnected') {
-          //     vm.sensorItems[i].color = 'red'
-          //     vm.sensorItems[i].text = vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.offline")
-          //     vm.$set(vm.sensorItems, i, vm.sensorItems[i])
-
-          //   }
-          // }
+          markerIcon = offlineIcon      
         }
         markerMap.get(data.body.station_id).setIcon(markerIcon)
-
       }
     },
     //设置websocket连接 Set up websocket connection

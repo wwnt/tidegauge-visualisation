@@ -2,6 +2,17 @@
 <!-- station display page, which shows the location of all stations -->
 <template>
   <v-container fluid class="pa-0">
+    <div style="z-index:99999;position:absolute;right:0.5%">
+      <v-snackbar v-for="(snackbar, index) in snackbars" v-bind:key="index" v-model="snackbar.show" :timeout="4000"
+        class="" :right="true" :top="true" :color="snackbar.color" style="display:contents">
+        {{ snackbar.text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn v-bind="attrs" icon @click="snackbar.show = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
     <!-- <v-card> -->
     <!-- 地图div map div -->
     <div id="map-container" style="min-height: 91vh"></div>
@@ -63,6 +74,7 @@ export default {
       email: '', // popup email
       documentId: 0,
       sensorItems: [], // 传感器数据 sensor list
+      snackbars: [],
     };
   },
   props: ['role'],
@@ -143,7 +155,7 @@ export default {
         } else if (vm.sensorItems[i].status == 'Abnormal') {
           vm.sensorItems[i].color = 'orange'
         } else {
-          vm.sensorItems[i].color = 'red'
+          vm.sensorItems[i].color = 'red' //Disconnected 这个站还没连接后台
         }
         vm.$set(vm.sensorItems, i, vm.sensorItems[i])
       }
@@ -195,19 +207,24 @@ export default {
     },
     handleWSMessage (evt) {
       let msg = JSON.parse(evt.data)
-      console.log(msg)
+      //console.log(msg)
       // 站点状态改变
       // change station status
       if (msg.type == 'UpdateStationStatus') {
         let markerIcon
         if (msg.body.status == 'Normal') {
           markerIcon = icon
-          vm.$emit("tips", msg.body.identifier + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.online"), "green")
+          //vm.$emit("tips", msg.body.identifier + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.online"), "green")
+          let text = `${msg.body.identifier} ${vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.normal")}`
+          this.showSnackbar(text , "green")
         } else {
           markerIcon = offlineIcon
-          vm.$emit("tips", msg.body.identifier + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.offline"), "red")
+          //vm.$emit("tips", msg.body.identifier + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.offline"), "red")
+          let text = `${msg.body.identifier} ${vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.offline")}`
+          this.showSnackbar(text, "red")
         }
         markerMap.get(msg.body.station_id).setIcon(markerIcon)
+        /* 站不在线，设备状态不变，可能是正常的
         // 修改数组中数据 用于更新dom
         // update data in array to update dom
         for (let i = 0; i < vm.sensorItems.length; i++) {
@@ -218,31 +235,38 @@ export default {
               vm.$set(this.sensorItems, i, vm.sensorItems[i])
             }
           }
-        }
+        } */
       }
       // item状态改变 
       // item change status
-      else {
+      else { 
         // 修改数组中数据 用于更新dom
         // update data in array to update dom
-        for (let i = 0; i < vm.sensorItems.length; i++) {
-          if (vm.sensorItems[i].name == msg.body.item_name) {
-            vm.sensorItems[i].status = msg.body.status
-            if (msg.body.status == 'Normal') {
-              vm.sensorItems[i].color = 'primary'
-              vm.$emit("tips", msg.body.item_name + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.online"), "green")
-            } else if (msg.body.status == 'Abnormal') {
-              vm.sensorItems[i].color = 'orange'
-              vm.$emit("tips", msg.body.item_name + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.noData"), "red")
-            } else {
-              vm.$emit("tips", msg.body.item_name + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.offline"), "red")
-              vm.sensorItems[i].color = 'red'
-            }
-            vm.$set(this.sensorItems, i, vm.sensorItems[i])
-          }
-        }
+        let index =  vm.sensorItems.findIndex(sensor => sensor.station_id == msg.body.station_id && sensor.name == msg.body.item_name)
+        if(index < 0) return
+        vm.sensorItems[index].status = msg.body.status
+        if (msg.body.status == 'Normal') {
+          vm.sensorItems[index].color = 'primary'   
+          let text = `${msg.body.identifier} ${msg.body.item_name} ${vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.normal")}`
+          this.showSnackbar(text, "green")
+        } else { // Abnormal
+          vm.sensorItems[index].color = 'orange'
+          let text = `${msg.body.identifier} ${msg.body.item_name} ${vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.abnormal")}`
+          this.showSnackbar(text, "orange")
+        }  
+        vm.$set(vm.sensorItems, index, vm.sensorItems[index])
       }
-
+    },
+    showSnackbar (text, color) {
+      this.snackbars.push({
+        show: true,
+        color: color,
+        text: text,
+      })
+      console.log(this.snackbars)
+    },
+    hideSnackbar (index) {
+      this.snackbars[index].show = false
     },
     //websocket链接成功 websocket connection successful
     handleWSOpen () {

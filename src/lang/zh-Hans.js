@@ -93,6 +93,8 @@ export default {
       comboboxLabel: "请选择要显示的数据",
       online: '在线',
       offline: "离线",
+      normal: '正常',
+      abnormal: '异常',
       noData: '暂无数据'
     },
     delConfirm:{

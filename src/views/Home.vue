@@ -4,15 +4,17 @@
   <v-app>
     <!-- 通知信息 -->
     <!-- tips -->
-    <div style="z-index:99999;position:absolute;right:0.5%">
-      <v-snackbar v-for="(snackbar, index) in snackbars" v-bind:key="index" v-model="snackbar.show" timeout="5000"
+    <!-- <div style="z-index:99999;position:absolute;right:0.5%">
+      <v-snackbar v-for="(snackbar, index) in snackbars" v-bind:key="index" v-model="snackbar.show" :timeout="4000"
         class="" :right="true" :top="true" :color="snackbar.color" style="display:contents">
         {{ snackbar.text }}
-        <v-btn @click="hideSnackbar(index)" icon dark>
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
+        <template v-slot:action="{ attrs }">
+          <v-btn v-bind="attrs" icon @click="snackbar.show = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </template>
       </v-snackbar>
-    </div>
+    </div> -->
 
     <v-app-bar app color="primary" dark dense class="header-row">
       <div class="title">{{ $vuetify.lang.t("$vuetify.systemName") }}</div>
@@ -436,35 +438,37 @@ export default {
       // wsConn.onopen = this.handleWSOpen;
       // wsConn.onclose = this.handleWSClose;
       // wsConn.onerror = this.handleWSError;
-      this.wsConn.onmessage = this.handleWSMessage;
+
+      //this.wsConn.onmessage = this.handleWSMessage;
     },
+    /*
     handleWSMessage (evt) {
       let msg = JSON.parse(evt.data)
       console.log(msg)
       this.connected = true
-      if (msg.type == 'UpdateStationStatus') {
+      if (msg.type == 'UpdateStationStatus') { //station 状态
         if (msg.body.status == 'Normal') {
-          this.tips(msg.body.identifier + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.online"), "green")
-        } else {
-          this.tips(msg.body.identifier + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.offline"), "red")
+          this.showSnackbar(msg.body.identifier + ' ' + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.normal"), "green")
+        } else { // Disconnected
+          this.showSnackbar(msg.body.identifier + ' ' + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.offline"), "red")
         }
-      } else {
-        if (msg.body.status == 'Normal') {
-          this.tips(msg.body.identifier + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.online"), "green")
-        } else {
-          this.tips(msg.body.identifier + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.offline"), "red")
+      } else { // UpdateItemStatus item状态
+        console.log(msg.body.status)
+        if (msg.body.status == "Normal") {
+          this.showSnackbar(msg.body.identifier + ' ' + msg.body.item_name + ' ' + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.normal"), "green")
+        } else { // Abnormal
+          this.showSnackbar(msg.body.identifier + ' ' + msg.body.item_name + ' ' + vm.$vuetify.lang.t("$vuetify.stationDetail.showItemData.abnormal"), "red")
         }
       }
-
-    },
-
+    },*/
     describeFormatter: function (row) {
       var sernor = this.allItems.filter(v => v.station_id == row.station_id && v.name == row.item)
       let s = row.identifier + " " + sernor[0].device_name + ":" + this.$vuetify.lang.t('$vuetify.historyData.dataType.' + row.item) +
         this.$vuetify.lang.t('$vuetify.message.thresholdExceeded') + row.cmp + '，' + this.$vuetify.lang.t('$vuetify.message.nowValue') + row.value
       return s
     },
-    showSnackbar (color, text) {
+    /*
+    showSnackbar (text, color) {
       this.snackbars.push({
         show: true,
         color: color,
@@ -473,7 +477,7 @@ export default {
     },
     hideSnackbar (index) {
       this.snackbars[index].show = false
-    },
+    }, */
     // 显示已读数据
     // show readed data
     showReadMsg () {

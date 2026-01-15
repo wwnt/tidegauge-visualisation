@@ -13,7 +13,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    //name: 'Home',
     component: () => import('../views/Home.vue'),
     children: [
       {
@@ -24,7 +24,7 @@ const routes = [
       },
       {
         path: 'stationList',
-        name: 'stationList',
+        name: 'stationList1',
         component: () => import('../views/stationList.vue'),
         meta: { requireAuth: true, roles: ['SA', 'GA', 'OU'] } 
       },
@@ -109,7 +109,7 @@ const routes = [
   // },
   {
     path: '/showData',
-    name: 'ShowData',
+    //name: 'ShowData',
     component: () => import('../views/bigScreen/main.vue'),
     children: [
       {

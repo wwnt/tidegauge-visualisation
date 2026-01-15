@@ -92,6 +92,8 @@ export default {
       comboboxLabel: "Please select the data to display",
       online: 'online',
       offline: "offline",
+      normal: 'normal',
+      abnormal: 'abnormal',
       noData: 'No data available'
     },
     delConfirm: {
